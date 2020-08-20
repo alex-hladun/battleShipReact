@@ -1,0 +1,110 @@
+
+#settings-box {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.settings-number {
+  padding: 0.4rem;
+}
+
+.settings-button {
+  cursor: pointer;
+}
+.settings-button:hover {
+  background-color: darkgreen;
+}
+.setting-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.settings-table {
+  border: chartreuse 0.1rem solid;
+  text-align: center;
+  width: 20rem !important;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+
+}
+
+.setting-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+
+.settings-banner {
+  font-family: 'Black Ops One', cursive;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 3rem;
+  /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
+  width: 300px;
+  height: 80px;
+  padding: 1rem;
+}
+
+.ticker-box-outer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.ticker-box {
+  border: chartreuse 0.1rem solid;
+  cursor: pointer;
+  font-size: 2rem;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
+
+.ticker-box:hover {
+  background-color: rgb(1, 80, 7);
+}
+
+td, th {
+  padding: 0.2rem;
+}
+
+th {
+  font-size: 2rem;
+}
+td {
+  font-size: 1.2rem;
+}
+
+article.settings-box-right {
+  width: 100%;
+  border: chartreuse 0.1rem solid;
+  padding: 0.5rem 0rem 0.5rem 0rem;
+  font-size: 2rem;
+  display: flex;
+  align-self: center;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+
+#settings-list {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 20vw;
+}

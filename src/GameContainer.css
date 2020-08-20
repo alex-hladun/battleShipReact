@@ -1,0 +1,259 @@
+
+#game-container {
+  font-family: 'Black Ops One', cursive;
+  font-family: 'Squada One', cursive;
+  background: rgb(0, 0, 0);
+  display: inline-block;
+  color: chartreuse;
+  align-items: center;
+  width: 1200px;
+  height: 1500px;
+  border: 1px solid chartreuse;
+  align-self: center;
+  justify-self: center;
+}
+
+#all-info-container {
+  display: flex;
+  flex-direction: row;
+}
+
+#computer-ship-dashboard {
+  margin-left: 100px;
+}
+
+#settings-box {
+  display: flex;
+  width: 90%;
+  flex-direction: column;
+}
+
+.setting-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.settings-table {
+  border: 0.2rem chartreuse solid;
+  text-align: center;
+  width: 20rem !important;
+}
+
+td, th {
+  padding: 0.2rem;
+}
+
+.div-settings-right {
+  border: chartreuse 0.1rem solid;
+  padding: 0.5rem;
+}
+
+#settings-list {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.info-banner {
+  align-items: center;
+  justify-content: center;
+  /* text-align: center; */
+  font-size: 30px;
+  /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
+  width: 300px;
+  height: 80px;
+}
+
+#game-log{
+  width: 90%;
+  height: 300px;
+  padding: 2%;
+  flex-direction: column-reverse;
+  /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
+  overflow:auto;
+}
+
+.info-box{
+  background: rgb(0, 0, 0);
+  display: flex; 
+  
+  margin-bottom: 25px;
+  margin-top: 25px;
+  
+  vertical-align: middle;
+  border: 4px solid chartreuse;
+}
+
+#player-board {
+  display: flex; 
+  flex-direction: column; 
+  width: 350px; 
+  height: 350px
+}
+#computer-board {
+  display: flex; 
+  flex-direction: column; 
+  /* margin-left: 100px; */
+  width: 350px; 
+  height: 350px
+}
+
+.game-board{
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.board-row-label {
+  display: flex; 
+  height: 33%;
+  /* margin-left: 10%; */
+  flex-direction: row; 
+  justify-content: space-around; 
+  background-color: black;
+  /* border: 1px chartreuse solid;  */
+}
+
+.top-row-label {
+  display: flex; 
+  height: 10%;
+  margin-left: 10%;
+  flex-direction: row; 
+  justify-content: space-around; 
+  background-color: black;
+}
+
+.left-column-label{
+  display: flex;
+  width: 10%;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(11, 20px);
+  grid-template-rows: repeat(11, 20px);
+  gap: 1px;
+  background-color: chartreuse;
+}
+
+.middle-content{
+  display: flex;
+  flex: 1;
+}
+
+.hover-red:hover {
+  background-color:rgb(255, 0, 0) !important;
+}
+.hover-blue:hover {
+  background-color:rgb(2, 68, 0) !important;
+}
+
+.cell-ship-strike {
+  background: rgb(87, 1, 1) !important;
+  justify-content: center;
+  flex: 1; 
+  height: 100%;
+  border-width: 1px;
+  border-color: chartreuse;
+  border-style: solid;
+  color: black;
+}
+
+.game-cell {
+   /* center the cell content */
+  justify-content: center;
+  flex: 1; 
+  height: 100%;
+  border-width: 1px;
+  border-color: chartreuse;
+  border-style: solid;
+  font-family: Arial;
+  font-size: 1rem;
+  color: black;
+  font-weight: bold;
+  background: rgb(0, 0, 0);
+}
+.cell {
+   /* center the cell content */
+  justify-content: center;
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  align-items: center;
+  display: flex;
+  font-family: Arial;
+  font-size: 1rem;
+  color: chartreuse;
+  font-weight: bold;
+  background: rgb(0, 0, 0);
+}
+.cell-row-label {
+   /* center the cell content */
+  justify-content: center;
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  align-items: center;
+  display: flex;
+  font-family: Arial;
+  font-size: 1rem;
+  color: chartreuse;
+  font-weight: bold;
+  background: rgb(0, 0, 0);
+}
+
+.ship-dashboard {
+  width: 120px;
+  height: 300px;
+  padding-top: 40px;
+  /* border: 1px solid chartreuse; */
+  align-items: center;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+}
+
+.ship-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.ship-blocks {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  border: 1px solid chartreuse;
+}
+
+.cell-selected {
+  background: chartreuse !important;
+  /* border: 1px black solid; */
+}
+
+.cell-ship-present {
+  background: rgb(68, 136, 0);
+  /* border-color: black; */
+
+}
+.cell-shot-miss {
+  background: rgb(0, 78, 0);
+  justify-content: center;
+  flex: 1; 
+  height: 100%;
+  border-width: 1px;
+  border-color: chartreuse;
+  border-style: solid;
+  color: black;
+}
+
+
+.page-body {
+  background-color: black;
+  justify-content: center;
+  align-items: center;
+
+}
