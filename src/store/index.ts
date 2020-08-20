@@ -7,10 +7,5 @@ export default configureStore({
   }
 })
 
-interface State {
-  settings: {
-    testVal: Number
-  }
-}
 
 // export type RootState = ReturnType<typeof reducer>
