@@ -1,41 +1,40 @@
 import React from 'react';
 import './Settings.css'
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
-import { increment, decrement, incrementByAmount } from './settingsSlice'
-import { State, GameState, Ship } from '../store/types'
-import Board from '../Board';
-
-
-
-const player = {
-  shotsPerTurn: 1,
-  boardSize: 10,
-  difficulty: 2,
-  diffArray: [
-    'Easy',
-    'Medium'
-  ]
-}
+import { incrementBoardSize, decrementBoardSize } from '../reducers/gameStateSlice'
+import { State, Ship } from '../store/types'
 
 // const Player = new Board('Player', 10);
 
 
-export default function Settings(gameState: GameState) {
-
+export default function Settings() {
   const typedUseSlector: TypedUseSelectorHook<State> = useSelector;
-
-  const testVal = typedUseSlector(state => state.settings.testVal)
-
+  const gameState = typedUseSlector(state => state.gameState)
   const dispatch = useDispatch()
 
-  const shipList = gameState.player.shipList.map((ship: Ship) => {
-    return (<tr>
-    <td>{ship.name}</td>
-    <td className="ticker-box">-</td>
-    <td>{ship.length}</td>
-    <td className="ticker-box">+</td>
-  </tr>)
+  const shipList = gameState.player.shipList.map((ship: Ship, index: number) => {
+    return (<tr key={index}>
+      <td>{ship.name}</td>
+      <td className="ticker-box">-</td>
+      <td>{ship.length}</td>
+      <td className="ticker-box">+</td>
+    </tr>)
   })
+
+  const handleBoardSizeIncrease = () => {
+    if (gameState.boardSize >= 15) {
+      console.log('Already 15')
+    } else {
+      dispatch(incrementBoardSize())
+    }
+  }
+  const handleBoardSizeDecrease = () => {
+    if (gameState.boardSize <= 5) {
+      console.log('Already At Minimum of 5')
+    } else {
+      dispatch(decrementBoardSize())
+    }
+  }
 
   return (
     <div id="game-container" style={{ display: 'flex', flexDirection: 'column' }}>
@@ -44,14 +43,17 @@ export default function Settings(gameState: GameState) {
         <div id="setting-row1" className="setting-row">
           <article className="table-container">
             <table id="settings-table" className="settings-table" style={{ width: '50%' }}>
-              <tr className="settings-table-row">
-                <th>Ship</th>
-                <th></th>
-                <th>Length</th>
-                <th></th>
-              </tr>
-              {shipList}
-
+              <thead>
+                <tr className="settings-table-row">
+                  <th>Ship</th>
+                  <th></th>
+                  <th>Length</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {shipList}
+              </tbody>
             </table>
             <div className="ticker-box-outer">
               <div id="setting-del-shp" className="ticker-box">
@@ -66,14 +68,14 @@ export default function Settings(gameState: GameState) {
           <article id="settings-list">
             <article className="settings-box-right">
               <div className="">Board Size: </div>
-              <span id="setting-bsi" className="settings-number">{gameState.boardSize}</span>
+              <span id="setting-bsi" data-testid="board-size" className="settings-number">{gameState.boardSize}</span>
             </article>
 
             <div className="ticker-box-outer">
-              <div id="setting-del-bsi" className="ticker-box">
+              <div id="setting-del-bsi" className="ticker-box" onClick={() => dispatch(handleBoardSizeDecrease)}>
                 -
           </div>
-              <div id="setting-add-bsi" className="ticker-box">
+              <div id="setting-add-bsi" data-testid="inc-board-size" className="ticker-box" onClick={handleBoardSizeIncrease}>
                 +
           </div>
             </div>
@@ -86,7 +88,7 @@ export default function Settings(gameState: GameState) {
               <div id="setting-del-dif" className="ticker-box">
                 -
           </div>
-              <div id="setting-add-dif" className="ticker-box">
+              <div id="setting-add-dif" className="ticker-box" >
                 +
           </div>
             </div>

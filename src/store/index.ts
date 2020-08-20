@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import settingsReducer from '../components/settingsSlice'
+import gameStateReducer from '../reducers/gameStateSlice'
 
 export default configureStore({
   reducer: {
-    settings: settingsReducer
+    gameState: gameStateReducer
   }
 })
 

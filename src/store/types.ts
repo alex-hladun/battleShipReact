@@ -1,7 +1,5 @@
 export interface State {
-  settings: {
-    testVal: Number
-  }
+  gameState: GameState
 }
 
 export interface Ship {
