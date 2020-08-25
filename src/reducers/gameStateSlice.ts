@@ -9,7 +9,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   boardSize: 10,
   difficulty: 1,
-  diffArray: ['easy', 'medium', 'hard', 'impossible'],
+  diffArray: ['EASY', 'MEDIUM', 'HARD', 'IMPOSSIBLE'],
+  currentTurn: null,
   player: {
     name: '',
     board: [],
@@ -59,11 +60,20 @@ export const gameStateSlice = createSlice({
     },
     decrementBoardSize: state => {
       state.boardSize -=1
+    },
+    incrementDifficulty: state => {
+      state.difficulty += 1
+    },
+    decrementDifficulty: state => {
+      state.difficulty -=1
+    },
+    changeShipSize: (state, action) => {
+      state.player.shipList[action.payload.ship].length += action.payload.delta
     }
   }
 })
 
-export const { incrementBoardSize, decrementBoardSize } = gameStateSlice.actions
+export const { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize } = gameStateSlice.actions
 
 export default gameStateSlice.reducer
 

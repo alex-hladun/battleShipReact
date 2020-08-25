@@ -13,6 +13,7 @@ export interface GameState {
   boardSize: number;
   difficulty: number;
   diffArray: string[];
+  currentTurn: string;
   player: {
     name: string;
     board: never[];

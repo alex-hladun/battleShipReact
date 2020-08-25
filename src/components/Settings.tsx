@@ -1,7 +1,7 @@
 import React from 'react';
 import './Settings.css'
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
-import { incrementBoardSize, decrementBoardSize } from '../reducers/gameStateSlice'
+import { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize } from '../reducers/gameStateSlice'
 import { State, Ship } from '../store/types'
 
 // const Player = new Board('Player', 10);
@@ -15,9 +15,9 @@ export default function Settings() {
   const shipList = gameState.player.shipList.map((ship: Ship, index: number) => {
     return (<tr key={index}>
       <td>{ship.name}</td>
-      <td className="ticker-box">-</td>
-      <td>{ship.length}</td>
-      <td className="ticker-box">+</td>
+      <td className="ticker-box" onClick={() => handleShipSizeChange(index , -1)}>-</td>
+      <td data-testid={`ship-length-${index}`}>{ship.length}</td>
+      <td className="ticker-box" onClick={() => handleShipSizeChange(index , +1)} data-testid={`inc-ship-length-${index}`}>+</td>
     </tr>)
   })
 
@@ -33,6 +33,32 @@ export default function Settings() {
       console.log('Already At Minimum of 5')
     } else {
       dispatch(decrementBoardSize())
+    }
+  }
+
+  const handleDifficultyIncrease = () => {
+    if (gameState.difficulty >= 3) {
+      console.log('Difficulty already at 3')
+    } else {
+      dispatch(incrementDifficulty())
+    }
+  }
+  const handleDifficultyDecrease = () => {
+    if (gameState.difficulty <= 0) {
+      console.log('Difficulty already at 0')
+    } else {
+      dispatch(decrementDifficulty())
+    }
+  }
+
+  function handleShipSizeChange(shipID: number, delta: number) {
+    if ((gameState.player.shipList[shipID].length + delta) >= 1 &&  (gameState.player.shipList[shipID].length + delta) < gameState.boardSize) {
+      dispatch(changeShipSize({
+        ship: shipID,
+        delta: delta
+      }))
+    } else {
+      console.log('Ship size must be > 1 and < boardSize')
     }
   }
 
@@ -55,14 +81,8 @@ export default function Settings() {
                 {shipList}
               </tbody>
             </table>
-            <div className="ticker-box-outer">
-              <div id="setting-del-shp" className="ticker-box">
-                -
-          </div>
-              <div id="setting-add-shp" className="ticker-box">
-                +
-          </div>
-            </div>
+           
+
           </article>
 
           <article id="settings-list">
@@ -72,7 +92,7 @@ export default function Settings() {
             </article>
 
             <div className="ticker-box-outer">
-              <div id="setting-del-bsi" className="ticker-box" onClick={() => dispatch(handleBoardSizeDecrease)}>
+              <div id="setting-del-bsi" className="ticker-box" onClick={(handleBoardSizeDecrease)}>
                 -
           </div>
               <div id="setting-add-bsi" data-testid="inc-board-size" className="ticker-box" onClick={handleBoardSizeIncrease}>
@@ -81,14 +101,14 @@ export default function Settings() {
             </div>
             <article className="settings-box-right">
               <div className="">Difficulty: </div>
-              <span id="setting-dif" className="settings-number">{gameState.diffArray[gameState.difficulty]}</span>
+              <span id="setting-dif" className="settings-number" data-testid="difficulty">{gameState.diffArray[gameState.difficulty]}</span>
             </article>
 
             <div className="ticker-box-outer">
-              <div id="setting-del-dif" className="ticker-box">
+              <div id="setting-del-dif" className="ticker-box" onClick={(handleDifficultyDecrease)}>
                 -
           </div>
-              <div id="setting-add-dif" className="ticker-box" >
+              <div id="setting-add-dif" className="ticker-box" data-testid="inc-difficulty" onClick={(handleDifficultyIncrease)}>
                 +
           </div>
             </div>

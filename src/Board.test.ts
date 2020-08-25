@@ -8,9 +8,7 @@ describe("Board Class", () => {
     expect( typeof testPlayer).toEqual('object')
 
   })
-  it("Creates a new player with board size of 10", () => {
-    // const testPlayer = new Board('testPlayer', 10);
-    
+  it("Creates a new player with board size of 10", () => {    
     expect(testPlayer.boardSize).toEqual(10)
   })
   it("Creates a new player of type Board - ShotsPerTurn should be a number", () => {
