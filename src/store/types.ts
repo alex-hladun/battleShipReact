@@ -1,5 +1,8 @@
+import {Socket} from "socket.io-client"
+
 export interface State {
-  gameState: GameState
+  gameState: GameState,
+  socketState: SocketState
 }
 
 export interface Ship {
@@ -7,6 +10,10 @@ export interface Ship {
   length: number;
   horizontal: Boolean;
   hitCount: number;
+}
+
+export interface SocketState{
+  socket: typeof Socket
 }
 
 export interface GameState {

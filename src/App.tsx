@@ -2,42 +2,31 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import GameContainer from './GameContainer'
-import socketIOClient from "socket.io-client";
 import { SocketMessage, User } from '../server/createSocketServer'
+import socketIOClient, { Socket } from "socket.io-client";
+import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
+// import { setSocket } from './reducers/socketStateSlice'
+import { State } from './store/types'
+import { connect } from 'react-redux'
+import { wsConnect, wsDisconnect } from './modules/websocket'
 
 
-const socketClient = socketIOClient();
+
+
+// const socketClient = socketIOClient();
+
+// const typedUseSlector: TypedUseSelectorHook<State> = useSelector;
 
 function App() {
-  console.log('RE-RENDER')
-
-  const [socket, setSocket] = useState({} as SocketIOClient.Socket)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    setSocket(socketClient)    
-      return () => {
-        if (socket.id) {
-        socket.disconnect()
-        }
-      }
-    }, [socket])
-
-    useEffect(() => {
-
-      return () => {if (socket.id) {
-        socket.close()
-      }
-      }
-    }, [socket])
-
-  useEffect(() => {
-    if (socket.connected) {
-      console.log('socket connect in useEffect')
-      socket.on("chat_message", (data: any) => {
-        console.log('initial roomlist from socket', data)
-      })
+    dispatch(wsConnect())
+    console.log('Socket should be connected from App.tsx')
+    return () => {
+      dispatch(wsDisconnect())
     }
-  }, [socket])
+  }, [dispatch])
 
   return <GameContainer />
 }

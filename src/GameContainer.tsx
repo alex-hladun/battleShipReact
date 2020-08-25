@@ -3,13 +3,14 @@ import './GameContainer.css'
 import Settings from './components/Settings'
 
 
+
+
 function GameContainer() {
-  const [gameState, setGameState] = useState()
 
 
-useEffect(() => {
 
-}, [])
+  // const [socket, setSocket] = useState({} as SocketIOClient.Socket)
+
 
 
 return (

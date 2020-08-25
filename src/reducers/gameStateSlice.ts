@@ -5,8 +5,10 @@
 
 // SettingsReducer
 import { createSlice } from '@reduxjs/toolkit'
+import { stat } from 'fs'
 
 const initialState = {
+  gameID: null,
   boardSize: 10,
   difficulty: 1,
   diffArray: ['EASY', 'MEDIUM', 'HARD', 'IMPOSSIBLE'],
@@ -69,12 +71,17 @@ export const gameStateSlice = createSlice({
     },
     changeShipSize: (state, action) => {
       state.player.shipList[action.payload.ship].length += action.payload.delta
+    },
+    setGameID: (state, action) => {
+      state.gameID = action.payload
     }
   }
 })
 
-export const { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize } = gameStateSlice.actions
+export const { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize, setGameID } = gameStateSlice.actions
 
 export default gameStateSlice.reducer
 
 export { initialState }
+
+// export const gameCommand = (gameParam: any) => ({ type: 'GAME_COMMAND', gameParam });

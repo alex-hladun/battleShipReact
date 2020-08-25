@@ -2,6 +2,7 @@ import React from 'react';
 import './Settings.css'
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
 import { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize } from '../reducers/gameStateSlice'
+import { startNewGame } from '../modules/websocket'
 import { State, Ship } from '../store/types'
 
 // const Player = new Board('Player', 10);
@@ -10,6 +11,7 @@ import { State, Ship } from '../store/types'
 export default function Settings() {
   const typedUseSlector: TypedUseSelectorHook<State> = useSelector;
   const gameState = typedUseSlector(state => state.gameState)
+  const socketState = typedUseSlector(state => state.socketState)
   const dispatch = useDispatch()
 
   const shipList = gameState.player.shipList.map((ship: Ship, index: number) => {
@@ -60,6 +62,13 @@ export default function Settings() {
     } else {
       console.log('Ship size must be > 1 and < boardSize')
     }
+  }
+
+  const playWithFriend = () => {
+    dispatch(startNewGame({
+      type: 'online',
+      name: 'randomGameName'
+    }))
   }
 
   return (
@@ -116,7 +125,7 @@ export default function Settings() {
 
         </div>
         <div id="setting-row2" className="setting-row">
-          <span className="info-banner info-box settings-button">Play Online With Friend</span>
+          <span className="info-banner info-box settings-button" onClick={playWithFriend}>Play Online With Friend</span>
           <span id="btn-play-cpu" className="info-banner info-box settings-button">Play Computer</span>
         </div>
 
