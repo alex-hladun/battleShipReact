@@ -5,12 +5,7 @@ export interface State {
   socketState: SocketState
 }
 
-export interface Ship {
-  name: string;
-  length: number;
-  horizontal: Boolean;
-  hitCount: number;
-}
+
 
 export interface SocketState{
   socket: typeof Socket
@@ -26,4 +21,11 @@ export interface GameState {
     board: never[];
     shipList: Array<Ship>
   }
+}
+
+export interface Ship {
+  name: string;
+  length: number;
+  horizontal: Boolean;
+  hitCount: number;
 }

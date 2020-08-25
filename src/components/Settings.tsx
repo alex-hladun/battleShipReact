@@ -67,7 +67,10 @@ export default function Settings() {
   const playWithFriend = () => {
     dispatch(startNewGame({
       type: 'online',
-      name: 'randomGameName'
+      payload: {
+        boardSize: gameState.boardSize,
+        host: gameState.player
+      }
     }))
   }
 
