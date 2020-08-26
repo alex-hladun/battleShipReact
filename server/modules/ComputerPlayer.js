@@ -1,7 +1,10 @@
 const { Player } = require('./Player')
 
 class ComputerPlayer extends Player {
-  constructor()
+  constructor(){
+    
+  }
+
 }
 
 module.exports = {

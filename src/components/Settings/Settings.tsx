@@ -1,7 +1,7 @@
 import React from 'react';
 import './Settings.css'
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
-import { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize } from '../../reducers/gameStateSlice'
+import { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize, resetBoard } from '../../reducers/gameStateSlice'
 import { startNewGame } from '../../modules/websocket'
 import { transitionToGame } from '../../reducers/viewModeSlice'
 import { State, Ship } from '../../store/types'
@@ -73,6 +73,7 @@ export default function Settings() {
         username: 'user70'
       }
     }))
+    dispatch(resetBoard())
     dispatch(transitionToGame())
   }
 

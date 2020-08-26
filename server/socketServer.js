@@ -1,6 +1,6 @@
 const { OnlineGame } = require('./modules/OnlineGame')
 const { ComputerGame } = require('./modules/ComputerGame')
-const { Rooms } = require('./modules/Rooms')
+const { GameList } = require('./modules/GameList')
 const socketIO = require('socket.io')
 
 module.exports = {
@@ -9,7 +9,11 @@ module.exports = {
 
     console.log('Starting socket server...')
 
-    const gameList = new Rooms(io)
+    const gameManager = new GameList(io)
+
+    const genRanString = () => {
+      return 'game' + (Math.random()*1000000).toFixed(0)
+    }
 
 
     io.sockets.on("connection", function (socket) {
@@ -24,11 +28,11 @@ module.exports = {
         console.log('new game data request', data)
         switch (data.type) {
           case 'online':
-            gameList.newOnlineRoom('randomGameName', data.payload.username, data.payload.boardSize);
-            console.log(gameList.onlineRoomList)
+            gameManager.newOnlineRoom(genRanString(), data.payload.username, data.payload.boardSize);
+            console.log(gameManager.onlineRoomList)
             break;
           case 'computer':
-            gameList.newComputerRoom('randomGameName', data.payload.boardSize, data.payload.host, data.payload.difficulty);
+            gameManager.newComputerRoom(genRanString(), data.payload.boardSize, data.payload.host, data.payload.difficulty);
             break;
           default:
             break;

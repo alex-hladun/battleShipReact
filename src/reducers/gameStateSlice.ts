@@ -6,15 +6,22 @@
 // SettingsReducer
 import { createSlice } from '@reduxjs/toolkit'
 import { stat } from 'fs'
+import { GameState } from '../store/types'
 
-const initialState = {
-  gameID: null,
+const genRanNameString = () => {
+  return 'user' + (Math.random()*10000).toFixed(0)
+}
+
+const initialState: GameState = {
+  gameID: '',
+  gameLog: ['Welcome to BATTLESHIP! Place your ships. Press \'R\' to rotate.'],
   boardSize: 10,
+  gameStatus: 'Place your ships',
   difficulty: 1,
   diffArray: ['EASY', 'MEDIUM', 'HARD', 'IMPOSSIBLE'],
-  currentTurn: null,
+  currentTurn: '',
   player: {
-    name: '',
+    name: genRanNameString(),
     board: [],
     shipList: [
       {
@@ -48,9 +55,12 @@ const initialState = {
         hitCount: 0
       }
     ]
+  },
+  opponent: {
+    name: 'Opponent',
+    board: [],
+    shipList: {}
   }
-,
-  opponent: {}
 }
 
 export const gameStateSlice = createSlice({
@@ -61,24 +71,47 @@ export const gameStateSlice = createSlice({
       state.boardSize += 1
     },
     decrementBoardSize: state => {
-      state.boardSize -=1
+      state.boardSize -= 1
     },
     incrementDifficulty: state => {
       state.difficulty += 1
     },
     decrementDifficulty: state => {
-      state.difficulty -=1
+      state.difficulty -= 1
     },
     changeShipSize: (state, action) => {
       state.player.shipList[action.payload.ship].length += action.payload.delta
     },
     setGameID: (state, action) => {
       state.gameID = action.payload
+    },
+    resetBoard: (state) => {
+      const board = [];
+      let row = [];
+      for (let i = 0; i < state.boardSize; i++) {
+        row.push("O");
+      }
+      for (let i = 0; i < state.boardSize; i++) {
+        const rowD = [...row];
+        board.push(rowD);
+      }
+
+      state.player.board = board
+      state.opponent.board = board
+      state.opponent.shipList = state.player.shipList
     }
   }
 })
 
-export const { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize, setGameID } = gameStateSlice.actions
+export const { 
+  resetBoard,
+  incrementBoardSize,
+  decrementBoardSize, 
+  incrementDifficulty, 
+  decrementDifficulty, 
+  changeShipSize, 
+  setGameID 
+} = gameStateSlice.actions
 
 export default gameStateSlice.reducer
 

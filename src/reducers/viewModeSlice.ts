@@ -10,7 +10,8 @@ export const viewModeSlice = createSlice({
   initialState,
   reducers: {
     transitionToGame: state => {
-      state.view = 'Game'
+      state.view = 'Game';
+
     }
   }
 })

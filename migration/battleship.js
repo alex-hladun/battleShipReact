@@ -115,23 +115,23 @@
 //     }
 
 //   }
-//   resetBoard() {
-//     this.board = [];
-//     for (const ship in this.shipList) {
-//       this.shipList[ship].hitCount = 0;
-//     }
-//     this.totalHits = 0;
-//     this.potentialMoves = [];
-//     // Generates the board with specified rows and columns
-//     let row = new Array();
-//     for (let i = 0; i < this.boardSize; i++) {
-//       row.push("O");
-//     }
-//     for (let i = 0; i < this.boardSize; i++) {
-//       const rowD = [...row];
-//       this.board.push(rowD);
-//     }
-//   }
+  resetBoard() {
+    this.board = [];
+    for (const ship in this.shipList) {
+      this.shipList[ship].hitCount = 0;
+    }
+    this.totalHits = 0;
+    this.potentialMoves = [];
+    // Generates the board with specified rows and columns
+    let row = new Array();
+    for (let i = 0; i < this.boardSize; i++) {
+      row.push("O");
+    }
+    for (let i = 0; i < this.boardSize; i++) {
+      const rowD = [...row];
+      this.board.push(rowD);
+    }
+  }
 
 //   generateComputerMoves(enemy) {
 //     const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];

@@ -9,6 +9,7 @@ class Player {
         this.host.totalShipTargets += this.host.shipList[ship].length;
       }
     };
+    this.resetBoard();
   }
  
   resetBoard() {

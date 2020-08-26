@@ -1,7 +1,7 @@
 const { OnlineGame } = require('./OnlineGame')
 const {ComputerGame} = require('./ComputerGame')
 
-class Rooms {
+class GameList {
   constructor(socket) {
     this.onlineRoomList = {};
     this.computerRoomList = {};
@@ -35,5 +35,5 @@ class Rooms {
 }
 
 module.exports = {
-  Rooms
+  GameList
 }
