@@ -2,13 +2,14 @@ import {Socket} from "socket.io-client"
 
 export interface State {
   gameState: GameState,
-  socketState: SocketState
+  viewState: ViewState
 }
 
 
 
-export interface SocketState{
-  socket: typeof Socket
+export interface ViewState{
+  view: string,
+  gameOver: boolean
 }
 
 export interface GameState {

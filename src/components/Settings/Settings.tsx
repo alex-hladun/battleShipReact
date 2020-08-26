@@ -1,9 +1,10 @@
 import React from 'react';
 import './Settings.css'
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
-import { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize } from '../reducers/gameStateSlice'
-import { startNewGame } from '../modules/websocket'
-import { State, Ship } from '../store/types'
+import { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize } from '../../reducers/gameStateSlice'
+import { startNewGame } from '../../modules/websocket'
+import { transitionToGame } from '../../reducers/viewModeSlice'
+import { State, Ship } from '../../store/types'
 
 // const Player = new Board('Player', 10);
 
@@ -11,7 +12,7 @@ import { State, Ship } from '../store/types'
 export default function Settings() {
   const typedUseSlector: TypedUseSelectorHook<State> = useSelector;
   const gameState = typedUseSlector(state => state.gameState)
-  const socketState = typedUseSlector(state => state.socketState)
+  const viewModeState = typedUseSlector(state => state.viewState)
   const dispatch = useDispatch()
 
   const shipList = gameState.player.shipList.map((ship: Ship, index: number) => {
@@ -69,9 +70,10 @@ export default function Settings() {
       type: 'online',
       payload: {
         boardSize: gameState.boardSize,
-        host: gameState.player
+        username: 'user70'
       }
     }))
+    dispatch(transitionToGame())
   }
 
   return (

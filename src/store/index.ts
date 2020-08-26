@@ -1,11 +1,13 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import gameStateReducer from '../reducers/gameStateSlice'
+import viewModeReducer from '../reducers/viewModeSlice'
 import socketIoMiddleware from '../middleware/socketMiddleware'
 
 
 export default configureStore({
   reducer: {
-    gameState: gameStateReducer
+    gameState: gameStateReducer,
+    viewState: viewModeReducer
   },
   middleware: [
     ...getDefaultMiddleware(), socketIoMiddleware

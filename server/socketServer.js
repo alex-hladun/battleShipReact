@@ -1,5 +1,5 @@
-const { OnlineGame } =require('./modules/OnlineGame')
-const { ComputerGame } =require('./modules/ComputerGame')
+const { OnlineGame } = require('./modules/OnlineGame')
+const { ComputerGame } = require('./modules/ComputerGame')
 const { Rooms } = require('./modules/Rooms')
 const socketIO = require('socket.io')
 
@@ -24,8 +24,8 @@ module.exports = {
         console.log('new game data request', data)
         switch (data.type) {
           case 'online':
-            gameList.newOnlineRoom('randomGameName', data.payload.boardSize, data.payload.host);
-            console.log(gameList.roomList)
+            gameList.newOnlineRoom('randomGameName', data.payload.username, data.payload.boardSize);
+            console.log(gameList.onlineRoomList)
             break;
           case 'computer':
             gameList.newComputerRoom('randomGameName', data.payload.boardSize, data.payload.host, data.payload.difficulty);

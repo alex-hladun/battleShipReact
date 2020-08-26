@@ -1,12 +1,14 @@
+const { Player } = require('./Player')
+
 class OnlineGame {
-  constructor(name, boardSize, host) {
-    this.name = name;
+  constructor(gameName, hostName, boardSize) {
+    this.name = gameName;
     this.boardSize = boardSize
-    this.host = host
+    this.host = new Player(hostName)
     this.hostTurn = null;
   }
 }
 
-module.exports={
+module.exports = {
   OnlineGame
 }
