@@ -22,6 +22,7 @@ const initialState: GameState = {
   currentTurn: '',
   player: {
     name: genRanNameString(),
+    ghostBoard: [],
     board: [],
     shipList: [
       {
@@ -59,6 +60,7 @@ const initialState: GameState = {
   opponent: {
     name: 'Opponent',
     board: [],
+    ghostBoard: [],
     shipList: {}
   }
 }
@@ -97,8 +99,42 @@ export const gameStateSlice = createSlice({
       }
 
       state.player.board = board
+      state.player.ghostBoard = board
       state.opponent.board = board
+      state.opponent.ghostBoard = board
       state.opponent.shipList = state.player.shipList
+    },
+    placeShip: (state, action) => {
+      if (action.payload.hz) {
+        for (let i = 0; i < action.payload.shipLen; i++) {
+          state.player.board[action.payload.row][action.payload.col + i] = action.payload.shipID
+        }
+      } else {
+        for (let i = 0; i < action.payload.shipLen; i++) {
+          state.player.board[action.payload.row + i][action.payload.col] = action.payload.shipID
+        }
+      }
+    },
+    setGameStatus: (state, action) => {
+      state.gameStatus = action.payload
+    },
+    setCurrentTurn: (state, action) => {
+      state.currentTurn = action.payload
+    },
+    setGhostBoard: (state, action) => {
+      console.log('req to update ghost board', action)
+      if (action.payload.user === state.player.name) {
+        state.player.ghostBoard = action.payload.board
+      } else if (action.payload.user === state.opponent.name) {
+        state.opponent.ghostBoard = action.payload.board
+      }
+    },
+    setNewGameData: (state, action) => {
+      console.log('new game data in gameState reducer', action.payload)
+      state.boardSize = action.payload.boardSize;
+      state.player.shipList = action.payload.shipList;
+      state.opponent.ghostBoard = action.payload.ghostBoard;
+      state.currentTurn = action.payload.currentTurn;
     }
   }
 })
@@ -110,7 +146,12 @@ export const {
   incrementDifficulty, 
   decrementDifficulty, 
   changeShipSize, 
-  setGameID 
+  setGameID,
+  placeShip,
+  setGameStatus,
+  setCurrentTurn,
+  setGhostBoard,
+  setNewGameData
 } = gameStateSlice.actions
 
 export default gameStateSlice.reducer

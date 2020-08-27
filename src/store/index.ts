@@ -3,13 +3,15 @@ import gameStateReducer from '../reducers/gameStateSlice'
 import viewModeReducer from '../reducers/viewModeSlice'
 import cellStateReducer from '../reducers/cellStateSlice'
 import socketIoMiddleware from '../middleware/socketMiddleware'
+import lobbyStateReducer from '../reducers/lobbyStateSlice'
 
 
 export default configureStore({
   reducer: {
     gameState: gameStateReducer,
     viewState: viewModeReducer,
-    cellState: cellStateReducer
+    cellState: cellStateReducer,
+    lobbyState: lobbyStateReducer
   },
   middleware: [
     ...getDefaultMiddleware(), socketIoMiddleware

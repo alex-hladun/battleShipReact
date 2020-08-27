@@ -16,19 +16,25 @@ export const cellStateSlice = createSlice({
     setActiveCell: (state, action) => {
       state.row = action.payload.row;
       state.col = action.payload.col;
-      console.log(state.row)
-      console.log(state.col)
     },
     setActiveShipLength: (state, action) => {
       state.shipLen = action.payload.length;
     },
     changeOrientation: (state) => {
-      state.hz = !state.hz
+      state.hz = !state.hz;
+    },
+    increaseShipIndex: (state) => {
+      state.shipIndex +=1;
     }
   }
 })
 
-export const { setActiveCell, setActiveShipLength, changeOrientation } = cellStateSlice.actions
+export const { 
+  setActiveCell, 
+  setActiveShipLength, 
+  changeOrientation,
+  increaseShipIndex
+ } = cellStateSlice.actions
 
 export default cellStateSlice.reducer
 

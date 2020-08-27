@@ -3,7 +3,7 @@ import ShipRow from './ShipRow';
 
 export default function ShipDashboard({ player }: any) {
 
-  console.log(player);
+  // console.log(player);
   const shipRows = player.shipList.map((ship: any) => {
     console.log('ship ishipDashboard', ship)
     return (

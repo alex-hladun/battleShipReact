@@ -9,8 +9,8 @@ class GameList {
     this.io = socket;
   }
 
-  newOnlineRoom(gameName, boardSize, hostName) {
-    let r = new OnlineGame(gameName, boardSize, hostName);
+  newOnlineRoom(gameName, boardSize, hostName, shipList) {
+    let r = new OnlineGame(gameName, boardSize, hostName, shipList);
     this.onlineRoomList[r.name] = r;
     this.socketDirectory[hostName] = [r.name]
     return r;
@@ -29,8 +29,8 @@ class GameList {
     console.log('new roomList: ', this.roomList)
   }
 
-  sendRoomUpdate() {
-    this.io.to("lobby").emit("initialRoomList", this.onlineRoomList);
+  sendRoomUpdate(io) {
+    io.to("lobby").emit("gameListUpdate", this.onlineRoomList);
   }
 }
 

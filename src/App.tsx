@@ -7,6 +7,7 @@ import GameContainer from './components/GameContainer/GameContainer'
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
 import { State } from './store/types'
 import { wsConnect, wsDisconnect } from './modules/websocket'
+import Lobby from './components/Lobby/Lobby';
 
 function App() {
   const typedUseSlector: TypedUseSelectorHook<State> = useSelector;
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <>
+      {viewModeState.view === 'Lobby' && <Lobby />}
       {viewModeState.view === 'Settings' && <Settings />}
       {viewModeState.view === 'Game' && <GameContainer />}
     </>

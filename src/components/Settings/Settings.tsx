@@ -6,13 +6,10 @@ import { startNewGame } from '../../modules/websocket'
 import { transitionToGame } from '../../reducers/viewModeSlice'
 import { State, Ship } from '../../store/types'
 
-// const Player = new Board('Player', 10);
-
-
 export default function Settings() {
   const typedUseSlector: TypedUseSelectorHook<State> = useSelector;
   const gameState = typedUseSlector(state => state.gameState)
-  const viewModeState = typedUseSlector(state => state.viewState)
+  // const viewModeState = typedUseSlector(state => state.viewState)
   const dispatch = useDispatch()
 
   const shipList = gameState.player.shipList.map((ship: Ship, index: number) => {
@@ -70,7 +67,9 @@ export default function Settings() {
       type: 'online',
       payload: {
         boardSize: gameState.boardSize,
-        username: 'user70'
+        username: gameState.player.name,
+        shipList: gameState.player.shipList,
+        gameName: 'game' + (Math.random()*10000).toFixed(0)
       }
     }))
     dispatch(resetBoard())
@@ -131,7 +130,7 @@ export default function Settings() {
 
         </div>
         <div id="setting-row2" className="setting-row">
-          <span className="info-banner info-box settings-button" onClick={playWithFriend}>Play Online With Friend</span>
+          <span className="info-banner info-box settings-button" onClick={playWithFriend}>Play Online</span>
           <span id="btn-play-cpu" className="info-banner info-box settings-button">Play Computer</span>
         </div>
 

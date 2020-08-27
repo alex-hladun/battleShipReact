@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  view: 'Settings',
+  view: 'Lobby',
   gameOver: false}
 
 export const viewModeSlice = createSlice({
@@ -12,11 +12,21 @@ export const viewModeSlice = createSlice({
     transitionToGame: state => {
       state.view = 'Game';
 
+    },
+    transitionToSettings: state => {
+      state.view = 'Settings'
+    },
+    transitionToLobby: state => {
+      state.view = 'Lobby'
     }
   }
 })
 
-export const { transitionToGame } = viewModeSlice.actions
+export const { 
+  transitionToGame,
+  transitionToSettings,
+  transitionToLobby
+ } = viewModeSlice.actions
 
 export default viewModeSlice.reducer
 

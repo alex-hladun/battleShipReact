@@ -1,7 +1,24 @@
 export interface State {
   gameState: GameState,
   viewState: ViewState,
-  cellState: CellState
+  cellState: CellState,
+  lobbyState: LobbyState
+}
+
+export interface LobbyItem {
+  [name:string] : {
+    name: string
+    boardSize: number;
+    host: Player;
+    hostReady: boolean;
+    hostTurn: null | boolean;
+    opponent: null | Player;
+    opponentReady: boolean;
+  }
+}
+
+export interface LobbyState {
+  [name:string] : LobbyItem
 }
 
 export interface CellState {
@@ -19,6 +36,7 @@ export interface ViewState{
 export interface Player {
     name: string;
     board: string[][];
+    ghostBoard: string [][];
     shipList: Array<Ship>
 }
 
