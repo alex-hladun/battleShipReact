@@ -7,7 +7,7 @@ import { setActiveShipLength, changeOrientation } from '../../../reducers/cellSt
 const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
 
-export default function BoardContainer(playerDetails: any, ownBoard: boolean = false) {
+export default function BoardContainer({playerDetails, ownBoard=false} : any) {
   const typedUseSlector: TypedUseSelectorHook<State> = useSelector;
   const gameState = typedUseSlector(state => state.gameState)
   const cellState = typedUseSlector(state => state.cellState)
@@ -23,20 +23,18 @@ export default function BoardContainer(playerDetails: any, ownBoard: boolean = f
 
   // Adds the keypress to change ship orientation.
   useEffect(() => {
-    document.addEventListener('keydown', (event) => {
-      if (event.keyCode === 82) {
+    const rKeyHandler = (event: any)=> {
+      if (event.keyCode === 82 && ownBoard) {
+        console.log('ownboard', ownBoard)
         console.log('r key pressed')
         dispatch(changeOrientation())
       }
-    }, false)
+    }
+    document.addEventListener('keydown', rKeyHandler)
 
-    return (() => {
-      document.removeEventListener('keydown', (event) => {
-        if (event.keyCode === 82) {
-          dispatch(changeOrientation())
-        }
-      }, false)
-    })
+    return () => {
+      document.removeEventListener('keydown', rKeyHandler)
+    }
 
   }, [dispatch])
 
