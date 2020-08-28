@@ -58,7 +58,7 @@ const initialState: GameState = {
     ]
   },
   opponent: {
-    name: 'Opponent',
+    name: 'Waiting for Opponent...',
     board: [],
     ghostBoard: [],
     shipList: {}
@@ -119,28 +119,52 @@ export const gameStateSlice = createSlice({
       state.gameStatus = action.payload
     },
     setCurrentTurn: (state, action) => {
-      state.currentTurn = action.payload
-    },
-    setGhostBoard: (state, action) => {
-      console.log('req to update ghost board', action)
-      if (action.payload.user === state.player.name) {
-        state.player.ghostBoard = action.payload.board
-      } else if (action.payload.user === state.opponent.name) {
-        state.opponent.ghostBoard = action.payload.board
+      if (action.payload === state.player.name) {
+        state.currentTurn = true;
+        state.gameStatus = 'Your Turn'
+      } else {
+        state.currentTurn = false;
+        state.gameStatus = 'Opponent\'s Turn';
       }
     },
     setNewGameData: (state, action) => {
       console.log('new game data in gameState reducer', action.payload)
+      state.gameID = action.payload.gameID;
       state.boardSize = action.payload.boardSize;
       state.player.shipList = action.payload.shipList;
+      state.opponent.name = action.payload.opponentName;
       state.opponent.ghostBoard = action.payload.ghostBoard;
       state.currentTurn = action.payload.currentTurn;
+    },
+    addNewMessage: (state, action) => {
+      console.log('new game message in gameState reducer', action.payload)
+      state.gameLog.push(action.payload)
+    },
+    addOpponent: (state, action) => {
+      if (action.payload !== state.player.name) {
+        state.opponent.name = action.payload
+      }
+    },
+    addShipHit: (state, action) => {
+      if (action.payload.user === state.player.name) {
+        state.player.shipList[action.payload.shipIndex].hitCount ++;
+      } else if (action.payload.user === state.opponent.name) {
+        state.opponent.shipList[action.payload.shipIndex].hitCount ++;
+      }
+    },
+    updateBoard: (state, action) => {
+      if (action.payload.user === state.player.name) {
+        state.player.board[action.payload.row][action.payload.col] = action.payload.result;
+      } else if (action.payload.user === state.opponent.name) {
+        state.opponent.board[action.payload.row][action.payload.col] = action.payload.result;
+      }
     }
   }
 })
 
 export const { 
   resetBoard,
+  addOpponent,
   incrementBoardSize,
   decrementBoardSize, 
   incrementDifficulty, 
@@ -150,8 +174,10 @@ export const {
   placeShip,
   setGameStatus,
   setCurrentTurn,
-  setGhostBoard,
-  setNewGameData
+  setNewGameData,
+  addNewMessage,
+  addShipHit,
+  updateBoard
 } = gameStateSlice.actions
 
 export default gameStateSlice.reducer

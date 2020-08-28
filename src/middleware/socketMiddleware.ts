@@ -1,5 +1,14 @@
 import * as actions from '../modules/websocket'
-import { setGameID, setGhostBoard, setCurrentTurn, setNewGameData } from '../reducers/gameStateSlice'
+import { 
+  setGameID, 
+  setCurrentTurn, 
+  setNewGameData, 
+  resetBoard, 
+  addNewMessage,
+  addOpponent,
+  addShipHit,
+  updateBoard
+ } from '../reducers/gameStateSlice'
 import { transitionToGame } from '../reducers/viewModeSlice'
 import socketIOClient from 'socket.io-client'
 import { updateLobby } from '../reducers/lobbyStateSlice'
@@ -7,15 +16,6 @@ import { updateLobby } from '../reducers/lobbyStateSlice'
 const socketMiddleware = () => {
   return (store: any) => {
     let socket: any = null;
-
-    const onOpen = (store: any) => {
-      console.log('websocket open');
-      store.dispatch(actions.wsConnected())
-    }
-
-    const onClose = (payload: any) => () => {
-      store.dispatch(actions.wsDisconnected());
-    };
 
     const onMessage = (payload: any) => {
       switch (payload.type) {
@@ -29,20 +29,43 @@ const socketMiddleware = () => {
 
     const onData = (payload: any) => {
       switch (payload.type) {
-        case 'update_ghost_board':
-          console.log(payload.data)
-          store.dispatch(setGhostBoard(payload.data))
-          store.dispatch(setCurrentTurn(payload.data))
-          break;
         case 'update_game_list':
           store.dispatch(updateLobby(payload.data))
           console.log(payload);
           break;
-        case 'new_game_data':
+        case 'new_game_info':
+          // When a player joins, the remaining game details are sent to syncronize players. 
           console.log('new game data from server', payload.data)
           store.dispatch(setNewGameData(payload.data))
           break;
-        default: 
+        case 'add_game_message':
+          console.log('new game message from server', payload.data)
+          store.dispatch(addNewMessage(payload.data))
+          break;
+        case 'start_game':
+          console.log('new game message from server', payload.data)
+          // Assign the game status to 'player turn'. 
+          // Change current player turn in gameState
+          store.dispatch(setCurrentTurn(payload.data.currentTurn))
+          break;
+        case 'update_game_data':
+          if (payload.data.currentTurn) {
+            store.dispatch(setCurrentTurn(payload.data.currentTurn))
+          }
+          if (payload.data.message) {
+            store.dispatch(addNewMessage(payload.data.message))
+          }
+          if (payload.data.opponentName) {
+            store.dispatch(addOpponent(payload.data.opponentName))
+          }
+          if (payload.data.shipUpdate) {
+            store.dispatch(addShipHit(payload.data.shipUpdate))
+          }
+          if (payload.data.attackResults) {
+            store.dispatch(updateBoard(payload.data.attackResults))
+          }
+          break;
+        default:
           break;
       }
     }
@@ -65,13 +88,6 @@ const socketMiddleware = () => {
               data
             })
           })
-          socket.on('ghostBoardUpdate', (data: any) => {
-            console.log('ghost board update received', data)
-            onData({
-              type: 'update_game',
-              data
-            })
-          })
           socket.on('gameListUpdate', (data: any) => {
             console.log('game List update received', data)
             onData({
@@ -81,14 +97,33 @@ const socketMiddleware = () => {
           })
           socket.on('joinSuccess', (data: any) => {
             console.log('join success', data)
-            return new Promise (() => onData({
+            return new Promise(() => onData({
               type: 'new_game_info',
               data
             })).then(
+              store.dispatch(resetBoard())
+            ).then(
               store.dispatch(transitionToGame())
             )
           })
-
+          socket.on('textMessage', (data: any) => {
+            console.log('game text update received', data)
+            onData({
+              type: 'add_game_message',
+              data
+            })
+          })
+          socket.on('startGame', (data: any) => {
+            onData({
+              type: 'start_game',
+              data
+            })})
+          socket.on('updateGame', (data: any) => {
+            onData({
+              type: 'update_game_data',
+              data
+            })
+          })
           break;
         case 'WS_DISCONNECT':
           if (socket !== null) {
@@ -112,6 +147,15 @@ const socketMiddleware = () => {
             user: action.data.user,
             board: action.data.board
           })
+          break;
+        case 'ATTACK_ENEMY':
+          socket.emit('attack', {
+            game: action.data.game,
+            user: action.data.user,
+            col: action.data.col,
+            row: action.data.row
+          })
+
           break;
         default:
           // console.log('the next action:', action);

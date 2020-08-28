@@ -29,8 +29,30 @@ class GameList {
     console.log('new roomList: ', this.roomList)
   }
 
+  // Sends the updated room list to all clients in the 'lobby'
   sendRoomUpdate(io) {
     io.to("lobby").emit("gameListUpdate", this.onlineRoomList);
+  }
+
+  sendGameMessage(io, gameID, logMessage) {
+    io.to(gameID).emit("updateGame", {
+      message: logMessage
+    });
+  }
+
+  sendGameUpdate(io, gameID, logMessage, currentTurn, updatePlayer, ghostBoard, shipList) {
+    io.to(gameID).emit("updateGame", {
+      message: logMessage,
+      currentTurn,
+      ghostBoard: {
+        user: updatePlayer,
+        ghostBoard
+      },
+      shipList: {
+        user: updatePlayer,
+        shipList
+      }
+    });
   }
 }
 

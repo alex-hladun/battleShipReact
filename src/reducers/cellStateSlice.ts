@@ -25,6 +25,10 @@ export const cellStateSlice = createSlice({
     },
     increaseShipIndex: (state) => {
       state.shipIndex +=1;
+
+      if (state.shipIndex === 4) {
+       
+      }
     }
   }
 })

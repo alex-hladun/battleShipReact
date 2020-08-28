@@ -40,7 +40,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "server": "nodemon ./server/server.js --exec pino-colada",
+    "server": "node ./server/server.js --exec nodemon | pino-colada",
     "eject": "react-scripts eject",
     "dev": "run-p server start"
   },

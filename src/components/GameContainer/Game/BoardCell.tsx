@@ -3,6 +3,8 @@ import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
 import { State } from '../../../store/types'
 import { setActiveCell, increaseShipIndex } from '../../../reducers/cellStateSlice'
 import { placeShip } from '../../../reducers/gameStateSlice'
+import { attackEnemy } from '../../../modules/websocket'
+
 const classNames = require('classnames');
 
 export default React.memo(function BoardCell({ row, col, boardSize, ownBoard }: any) {
@@ -40,13 +42,15 @@ export default React.memo(function BoardCell({ row, col, boardSize, ownBoard }: 
 
   // Assign colors to cells if ship is eligible or not
   if (!ownBoard) {
-    cellClasses = classNames('game-cell', 'player-cell', 'hover-dk-green', {
-      'cell-ship-strike': (gameState.opponent.ghostBoard[row-1][col-1] !== 'M' && gameState.opponent.board[row-1][col-1] !== 'O'),
-      'cell-shot-miss': (gameState.opponent.ghostBoard[row-1][col-1] === 'M')
+    cellClasses = classNames('game-cell', 'player-cell', {
+      'cell-ship-strike': (gameState.opponent.board[row-1][col-1] === 'X'),
+      'cell-shot-miss': (gameState.opponent.board[row-1][col-1] === 'M'),
+      'cell-selected': (gameState.opponent.board[row-1][col-1] === 'O' && row === cellState.row && col === cellState.col && !ownBoard)
     })
   } else if (cellState.hz && gameState.gameStatus === 'Place your ships') {
     // (cellState.col + cellState.shipLen <= boardSize + 1)
     cellClasses = classNames('game-cell', 'player-cell', {
+      'cell-ship-present': (gameState.player.board[row - 1][col - 1] !==  'O'),
       'cell-selected': (gameState.player.board[row - 1][col - 1] !==  'O') || (row === cellState.row && col < cellState.col + cellState.shipLen && col >= cellState.col && checkEligible(cellState.row - 1, cellState.col - 1)),
       'cell-ship-strike': row === cellState.row && col < cellState.col + cellState.shipLen && col >= cellState.col && !checkEligible(cellState.row - 1, cellState.col - 1)
     });
@@ -57,8 +61,9 @@ export default React.memo(function BoardCell({ row, col, boardSize, ownBoard }: 
     });
   } else {
     cellClasses = classNames('game-cell', 'player-cell', {
-      'cell-selected': (gameState.player.board[row - 1][col - 1] !==  'O'),
-      'cell-ship-strike': (gameState.player.board[row - 1][col - 1] ===  'X')
+      'cell-ship-present': (gameState.player.board[row - 1][col - 1] !==  'O'),
+      'cell-ship-strike': (gameState.player.board[row - 1][col - 1] ===  'X'),
+      'cell-shot-miss': (gameState.player.board[row-1][col-1] === 'M')
     });
   }
 
@@ -69,7 +74,7 @@ export default React.memo(function BoardCell({ row, col, boardSize, ownBoard }: 
     }))
   }
 
-  const handleShipPlacement = (row: number, col: number) => {
+  const handleCellClick = (row: number, col: number) => {
     if (checkEligible(row -1, col -1) && gameState.gameStatus === 'Place your ships') {
       // Place the ship on the board
       // Dispatch row, col, ship length, shipID, and hz
@@ -83,11 +88,19 @@ export default React.memo(function BoardCell({ row, col, boardSize, ownBoard }: 
 
       // Increase the ship index
       dispatch(increaseShipIndex())
+    } else if (!ownBoard && gameState.gameStatus === 'Your Turn') {
+      dispatch(attackEnemy({
+        game: gameState.gameID,
+        col: col - 1,
+        row: row -1,
+        user: gameState.player.name
+      }))
+
     }
   }
 
   return (
-    <div className={cellClasses} onMouseOver={() => mouseHover(row, col)} onClick={() => handleShipPlacement(row,col)}></div>
+    <div className={cellClasses} onMouseOver={() => mouseHover(row, col)} onClick={() => handleCellClick(row,col)}></div>
   )
 
 })

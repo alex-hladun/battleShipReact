@@ -34,6 +34,13 @@
   justify-content: center;
 }
 
+.lobby-row {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
 .settings-table {
   border: 0.2rem chartreuse solid;
   text-align: center;

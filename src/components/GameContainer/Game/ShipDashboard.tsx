@@ -3,9 +3,7 @@ import ShipRow from './ShipRow';
 
 export default function ShipDashboard({ player }: any) {
 
-  // console.log(player);
   const shipRows = player.shipList.map((ship: any) => {
-    console.log('ship ishipDashboard', ship)
     return (
     <div className="ship-row">
       <ShipRow ship={ship}/>
@@ -14,7 +12,7 @@ export default function ShipDashboard({ player }: any) {
   })
 
   return (
-    <div id="player-ship-dashboard" className="ship-dashboard">
+    <div className="ship-dashboard">
      {shipRows}
     </div>
   )

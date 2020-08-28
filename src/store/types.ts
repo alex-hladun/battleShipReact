@@ -47,7 +47,7 @@ export interface GameState {
   boardSize: number;
   difficulty: number;
   diffArray: string[];
-  currentTurn: string;
+  currentTurn: string | boolean;
   player: Player;
   opponent: any;
 }
