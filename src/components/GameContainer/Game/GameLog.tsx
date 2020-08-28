@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 export default function GameLog({messages}: any) {
-  // console.log(messages)
-
   const gameMessages = messages.map((message: string) => {
     return (
     <span>{message}</span>

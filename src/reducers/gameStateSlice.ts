@@ -2,10 +2,7 @@
 // In charge of deciding if and how to update the state.settings section
 // Whenever an action is dispatched.
 
-
-// SettingsReducer
 import { createSlice } from '@reduxjs/toolkit'
-import { stat } from 'fs'
 import { GameState } from '../store/types'
 
 const genRanNameString = () => {
@@ -15,6 +12,7 @@ const genRanNameString = () => {
 const initialState: GameState = {
   gameID: '',
   gameLog: ['Welcome to BATTLESHIP! Place your ships. Press \'R\' to rotate.'],
+  winner: '',
   boardSize: 10,
   gameStatus: 'Place your ships',
   difficulty: 1,
@@ -104,6 +102,11 @@ export const gameStateSlice = createSlice({
       state.opponent.ghostBoard = board
       state.opponent.shipList = state.player.shipList
     },
+    resetGameState: (state) => {
+      const playerName = state.player.name
+      state = initialState;
+      state.player.name = playerName
+    },
     placeShip: (state, action) => {
       if (action.payload.hz) {
         for (let i = 0; i < action.payload.shipLen; i++) {
@@ -158,12 +161,17 @@ export const gameStateSlice = createSlice({
       } else if (action.payload.user === state.opponent.name) {
         state.opponent.board[action.payload.row][action.payload.col] = action.payload.result;
       }
+    },
+    setWinner: (state, action) => {
+      state.gameStatus = 'Game Over'
+      state.winner = action.payload
     }
   }
 })
 
 export const { 
   resetBoard,
+  resetGameState,
   addOpponent,
   incrementBoardSize,
   decrementBoardSize, 
@@ -177,7 +185,8 @@ export const {
   setNewGameData,
   addNewMessage,
   addShipHit,
-  updateBoard
+  updateBoard,
+  setWinner
 } = gameStateSlice.actions
 
 export default gameStateSlice.reducer

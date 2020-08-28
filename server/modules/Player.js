@@ -118,21 +118,16 @@ class Player {
 
 
         // Sunk ship Message
-        if (enemy.shipList[shotTarget].hitCount === enemy.shipList[shotTarget - 1].length) {
-          // logMessage = $(`<span>${this.name.toLocaleUpperCase()} <b>SUNK</b> ${enemy.name.toLocaleUpperCase()}'s  <b>${enemyShot.toLocaleUpperCase()}!!</b></span>`);
-          // logMessage.appendTo($(`#game-log`));
+        if (enemy.shipList[shotTarget - 1].hitCount === enemy.shipList[shotTarget - 1].length) {
+          io.to(gameID).emit('updateGame', {
+            message: `${this.name.toLocaleUpperCase()} sunk ${enemy.name.toLocaleUpperCase()}'S ${enemy.shipList[shotTarget - 1].name}`
+          })
         }
-        // $('#game-log').scrollTop(0);
-
-        // $(`#${enemy.name}${target}`).removeClass(`computer-cell game-cell`).addClass(`cell-ship-strike hover-red`);
-        // $(`#${enemy.name}${target}`).unbind('mouseout');
-
         if (this.totalHits === this.totalShipTargets) {
-          // return true
-          // $('#game-over-banner').text(`${this.name.toLocaleUpperCase()} Wins!`);
-          // $('#game-over-banner').addClass("show");
-          // $(".computer-cell").unbind();
-          // this.playerTurn = "game-over";
+          io.to(gameID).emit('updateGame', {
+            message: `${this.name.toLocaleUpperCase()} WINS!`,
+            winner: this.name
+          })
         }
       // return false;
     }

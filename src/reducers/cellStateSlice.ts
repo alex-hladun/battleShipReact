@@ -29,15 +29,19 @@ export const cellStateSlice = createSlice({
       if (state.shipIndex === 4) {
        
       }
+    },
+    resetCellState: (state) => {
+      state = initialState;
     }
-  }
+  },
 })
 
 export const { 
   setActiveCell, 
   setActiveShipLength, 
   changeOrientation,
-  increaseShipIndex
+  increaseShipIndex,
+  resetCellState
  } = cellStateSlice.actions
 
 export default cellStateSlice.reducer

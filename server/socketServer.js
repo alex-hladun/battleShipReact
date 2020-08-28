@@ -19,12 +19,12 @@ module.exports = {
 
     io.sockets.on("connection", function (socket) {
       // Send roomList to each new participant
-      console.log('Socket connected to server')
       socket.join("lobby");
       gameManager.sendRoomUpdate(io)
 
       socket.on('newGame', data => {
         socket.join(data.payload.gameName)
+        gameManager.socketDirectory[socket.id] = data.payload.gameName;
         switch (data.type) {
           case 'online':
             gameManager.newOnlineRoom(data.payload.gameName, data.payload.boardSize, data.payload.username, data.payload.shipList);
@@ -50,13 +50,11 @@ module.exports = {
           gameManager.onlineRoomList[data.game].host.board = data.board;
           console.log('host board', gameManager.onlineRoomList[data.game].host.board)
           gameManager.onlineRoomList[data.game].hostReady = true;
-          // gameManager.onlineRoomList[data.game].sendHostUpdate(io);
           console.log(gameManager.onlineRoomList[data.game]);
         } else if (gameManager.onlineRoomList[data.game].opponent.name === data.user) {
           gameManager.onlineRoomList[data.game].opponent.board = data.board;
           console.log('opponent board', gameManager.onlineRoomList[data.game].opponent.board)
           gameManager.onlineRoomList[data.game].opponentReady = true;
-          // gameManager.onlineRoomList[data.game].sendOpponentUpdate(io);
         }
         gameManager.sendGameMessage(io, data.game, `${data.user} has finished placing their ships.`)
 
@@ -77,6 +75,8 @@ module.exports = {
         if (data.type === 'Online') {
           gameManager.onlineRoomList[data.payload.game].opponent.name = data.payload.user;
           socket.join(data.payload.game)
+          gameManager.socketDirectory[socket.id] = data.payload.game;
+
           socket.emit('joinSuccess', {
             gameID: data.payload.game,
             shipList: gameManager.onlineRoomList[data.payload.game].host.shipList,
@@ -90,14 +90,34 @@ module.exports = {
             message: `${data.payload.user} has joined the game.`
           })
         } else if (data.type === 'Computer') {
-
         }
+      })
+
+      socket.on('leaveGame', data => {
+        console.log('leave game', data)
+        gameManager.delRoom(data.game)
+        gameManager.socketDirectory[socket.id] = null;
+        socket.leave(data.game)
+        socket.join('lobby')
+        gameManager.sendRoomUpdate(io)
+        io.to(data.game).emit('disconnected', {
+          game: data.game
+        })
+      })
+
+      socket.on('disconnect', data => {
+        if (gameManager.socketDirectory[socket.id]) {
+          io.to(gameManager.socketDirectory[socket.id]).emit('disconnected', {
+            game: gameManager.socketDirectory[socket.id]
+          })
+          gameManager.delRoom(gameManager.socketDirectory[socket.id]);
+          gameManager.socketDirectory[socket.id] = null;
+        }
+        gameManager.sendRoomUpdate(io)
       })
 
 
       socket.on('attack', data => {
-        // let gameOver = false;
-        console.log('attaack data', data)
         if (gameManager.onlineRoomList[data.game].host.name === data.user && gameManager.onlineRoomList[data.game].currentTurn === data.user) {
           gameManager.onlineRoomList[data.game].host.attack(gameManager.onlineRoomList[data.game].opponent, data.row, data.col, io, data.game)
           gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].opponent.name
@@ -107,7 +127,13 @@ module.exports = {
         }
       })
 
+      
+
+
 
     })
   }
 }
+
+
+

@@ -43,6 +43,7 @@ export interface Player {
 export interface GameState {
   gameID: string;
   gameLog: string[];
+  winner: string;
   gameStatus: string
   boardSize: number;
   difficulty: number;

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ShipRow from './ShipRow';
 
 export default function ShipDashboard({ player }: any) {
-
   const shipRows = player.shipList.map((ship: any) => {
     return (
     <div className="ship-row">

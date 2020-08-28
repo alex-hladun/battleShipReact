@@ -18,6 +18,9 @@ export const viewModeSlice = createSlice({
     },
     transitionToLobby: state => {
       state.view = 'Lobby'
+    },
+    transitionToDisconnect: state => {
+      state.view = 'Disconnect'
     }
   }
 })
@@ -25,7 +28,8 @@ export const viewModeSlice = createSlice({
 export const { 
   transitionToGame,
   transitionToSettings,
-  transitionToLobby
+  transitionToLobby,
+  transitionToDisconnect
  } = viewModeSlice.actions
 
 export default viewModeSlice.reducer

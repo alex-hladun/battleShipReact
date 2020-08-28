@@ -1,13 +1,11 @@
 
 #game-container {
-  /* font-family: 'Black Ops One', cursive; */
   font-family: 'Squada One', cursive;
   background: rgb(0, 0, 0);
   display: inline-block;
   color: chartreuse;
   align-items: center;
-  width: 1200px; 
-  /* height: 1500px; */
+  width: 95%; 
   border: 1px solid chartreuse;
   align-self: center;
   justify-self: center;
@@ -16,6 +14,8 @@
 #all-info-container {
   display: flex;
   flex-direction: row;
+  width: 90%;
+  justify-content: space-around;
 }
 
 #computer-ship-dashboard {

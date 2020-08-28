@@ -1,4 +1,3 @@
-import * as actions from '../modules/websocket'
 import { 
   setGameID, 
   setCurrentTurn, 
@@ -7,11 +6,13 @@ import {
   addNewMessage,
   addOpponent,
   addShipHit,
-  updateBoard
+  updateBoard,
+  setWinner
  } from '../reducers/gameStateSlice'
-import { transitionToGame } from '../reducers/viewModeSlice'
+import { transitionToGame, transitionToDisconnect } from '../reducers/viewModeSlice'
 import socketIOClient from 'socket.io-client'
 import { updateLobby } from '../reducers/lobbyStateSlice'
+import { leaveGame } from '../modules/websocket'
 
 const socketMiddleware = () => {
   return (store: any) => {
@@ -63,6 +64,9 @@ const socketMiddleware = () => {
           }
           if (payload.data.attackResults) {
             store.dispatch(updateBoard(payload.data.attackResults))
+          }
+          if (payload.data.winner) {
+            store.dispatch(setWinner(payload.data.winner))
           }
           break;
         default:
@@ -124,6 +128,11 @@ const socketMiddleware = () => {
               data
             })
           })
+          socket.on('disconnected', (data: any) => {
+            store.dispatch(transitionToDisconnect())
+            console.log('disconnected command receive', data)
+            store.dispatch(leaveGame(data))
+          })
           break;
         case 'WS_DISCONNECT':
           if (socket !== null) {
@@ -155,7 +164,12 @@ const socketMiddleware = () => {
             col: action.data.col,
             row: action.data.row
           })
-
+          break;
+        case 'LEAVE_GAME':
+          console.log(action.data)
+          socket.emit('leaveGame', {
+            game: action.data.game,
+          })
           break;
         default:
           // console.log('the next action:', action);

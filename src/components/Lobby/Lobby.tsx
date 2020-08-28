@@ -1,21 +1,14 @@
 import React from 'react';
-// import '../Settings/Settings.css '
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
 import { transitionToSettings } from '../../reducers/viewModeSlice'
-import { State, LobbyState, LobbyItem } from '../../store/types'
+import { State } from '../../store/types'
 import { joinGame } from '../../modules/websocket'
-
-
-// const Player = new Board('Player', 10);
-
 
 export default function Lobby() {
   const typedUseSlector: TypedUseSelectorHook<State> = useSelector;
   const gameState = typedUseSlector(state => state.gameState)
   const lobbyState = typedUseSlector(state => state.lobbyState)
-  // const viewModeState = typedUseSlector(state => state.viewState)
   const dispatch = useDispatch()
-
   const joinLobbyGame = (game: any) => {
 
     dispatch(joinGame({
@@ -27,17 +20,12 @@ export default function Lobby() {
     }))
   }
 
-
   const showSettings = () => {
     dispatch(transitionToSettings())
   }
 
-  // console.log('lobbystate keys', Object.keys(lobbyState.gameList))
   const gameListKeys = Object.keys(lobbyState.gameList)
-
   const gameList = gameListKeys.map((game: string, index) => {
-    // console.log('lobbystate gamelist', lobbyState.gameList[game]);
-    // console.log('game', game)
     return (
       <div>
     <span className="info-banner info-box settings-button" onClick={() => joinLobbyGame(lobbyState.gameList[game].name)}>{lobbyState.gameList[game].name}</span>

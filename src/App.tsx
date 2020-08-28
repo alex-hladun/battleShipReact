@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import './components/GameContainer/GameContainer.css'
 import Settings from './components/Settings/Settings'
@@ -8,6 +7,7 @@ import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
 import { State } from './store/types'
 import { wsConnect, wsDisconnect } from './modules/websocket'
 import Lobby from './components/Lobby/Lobby';
+import Disconnect from './components/Disconnect/Disconnect';
 
 function App() {
   const typedUseSlector: TypedUseSelectorHook<State> = useSelector;
@@ -27,6 +27,7 @@ function App() {
       {viewModeState.view === 'Lobby' && <Lobby />}
       {viewModeState.view === 'Settings' && <Settings />}
       {viewModeState.view === 'Game' && <GameContainer />}
+      {viewModeState.view === 'Disconnect' && <Disconnect />}
     </>
     )
 }
