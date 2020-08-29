@@ -59,7 +59,7 @@ const initialState: GameState = {
     name: 'Waiting for Opponent...',
     board: [],
     ghostBoard: [],
-    shipList: {}
+    shipList: []
   }
 }
 

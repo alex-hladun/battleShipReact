@@ -42,7 +42,7 @@
   "type": "module",
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI= react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "server": "node ./server/server.js --exec nodemon | pino-colada",
     "eject": "react-scripts eject",
