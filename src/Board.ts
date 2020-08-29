@@ -201,16 +201,10 @@ export default class Board {
     switch (enemyShot) {
     case 'O':
       enemy.board[rowID][colID] = "M";
-      // logMessage = $(`<span>${this.name.toLocaleUpperCase()} fired at ${target.toLocaleUpperCase()}. <b>Miss!</b></span>`);
-      // logMessage.appendTo($(`#game-log`));
-      // $('#game-log').scrollTop(0);
-      // $(`#${enemy.name}${target}`).removeClass(`computer-cell game-cell`).addClass(`cell-shot-miss hover-blue`);
-      // $(`#${enemy.name}${target}`).unbind('mouseenter');
       return true;
     case 'X':
       return false;
     case "M":
-      console.log(this)
       return false;
     default:
       // Adds red to ship indicator.

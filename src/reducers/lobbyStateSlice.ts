@@ -9,7 +9,6 @@ export const lobbyStateSlice = createSlice({
   initialState,
   reducers: {
     updateLobby: (state, action) => {
-      console.log('updating lobby state', action.payload)
       state.gameList = action.payload
     }
   }

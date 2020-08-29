@@ -85,6 +85,17 @@ export const gameStateSlice = createSlice({
     setGameID: (state, action) => {
       state.gameID = action.payload
     },
+    checkShipSizes: (state) => {
+      for (const ship in state.player.shipList) {
+        if (state.player.shipList[ship].length >= state.boardSize - 3) {
+          if (state.boardSize >= 6) {
+            state.player.shipList[ship].length = state.boardSize - 4
+          } else {
+            state.player.shipList[ship].length = state.boardSize - 3
+          }
+        }
+      }
+    },
     resetBoard: (state) => {
       const board = [];
       let row = [];
@@ -129,7 +140,6 @@ export const gameStateSlice = createSlice({
       }
     },
     setNewGameData: (state, action) => {
-      console.log('new game data in gameState reducer', action.payload)
       state.gameID = action.payload.gameID;
       state.boardSize = action.payload.boardSize;
       state.player.shipList = action.payload.shipList;
@@ -138,7 +148,6 @@ export const gameStateSlice = createSlice({
       state.currentTurn = action.payload.currentTurn;
     },
     addNewMessage: (state, action) => {
-      console.log('new game message in gameState reducer', action.payload)
       state.gameLog.push(action.payload)
     },
     addOpponent: (state, action) => {
@@ -174,7 +183,8 @@ export const {
   incrementBoardSize,
   decrementBoardSize, 
   incrementDifficulty, 
-  decrementDifficulty, 
+  decrementDifficulty,
+  checkShipSizes,
   changeShipSize, 
   setGameID,
   placeShip,

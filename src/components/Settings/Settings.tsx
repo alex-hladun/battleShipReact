@@ -1,7 +1,7 @@
 import React from 'react';
 import './Settings.css'
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
-import { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize, resetBoard } from '../../reducers/gameStateSlice'
+import { incrementBoardSize, decrementBoardSize, incrementDifficulty, decrementDifficulty, changeShipSize, resetBoard, checkShipSizes } from '../../reducers/gameStateSlice'
 import { startNewGame } from '../../modules/websocket'
 import { transitionToGame } from '../../reducers/viewModeSlice'
 import { State, Ship } from '../../store/types'
@@ -51,17 +51,18 @@ export default function Settings() {
   }
 
   function handleShipSizeChange(shipID: number, delta: number) {
-    if ((gameState.player.shipList[shipID].length + delta) >= 1 &&  (gameState.player.shipList[shipID].length + delta) < gameState.boardSize) {
+    if ((gameState.player.shipList[shipID].length + delta) >= 1 &&  (gameState.player.shipList[shipID].length + delta) < gameState.boardSize - 3) {
       dispatch(changeShipSize({
         ship: shipID,
         delta: delta
       }))
     } else {
-      console.log('Ship size must be > 1 and < boardSize')
+      console.log('Ship size must be > 1 and < boardSize - 3')
     }
   }
 
   const playWithFriend = () => {
+    dispatch(checkShipSizes())
     dispatch(startNewGame({
       type: 'online',
       payload: {
@@ -74,8 +75,9 @@ export default function Settings() {
     dispatch(resetBoard())
     dispatch(transitionToGame())
   }
-
+  
   const playWithComputer = () => {
+    dispatch(checkShipSizes())
     dispatch(startNewGame({
       type: 'computer',
       payload: {

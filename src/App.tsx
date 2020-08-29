@@ -16,7 +16,6 @@ function App() {
 
   useEffect(() => {
     dispatch(wsConnect())
-    console.log('Socket should be connected from App.tsx')
     return () => {
       dispatch(wsDisconnect())
     }

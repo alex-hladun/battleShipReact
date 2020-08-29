@@ -64,8 +64,6 @@ module.exports = {
       })
 
       socket.on('donePlacing', data => {
-        console.log('done placing data', data)
-
         // Check if game is online or computer
         if (gameManager.onlineRoomList[data.game]) {
           if (gameManager.onlineRoomList[data.game].host.name === data.user) {

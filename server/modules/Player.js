@@ -79,6 +79,8 @@ class Player {
             shipIndex: shotTarget - 1
           }
         })
+        console.log('enemy shiplist', enemy.shipList)
+        console.log('user shiplist', this.shipList)
 
         // Sunk ship Message
         if (enemy.shipList[shotTarget - 1].hitCount === enemy.shipList[shotTarget - 1].length) {

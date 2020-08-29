@@ -44,10 +44,10 @@ export default function GameContainer() {
         <div id="cpu-above-label">{gameState.opponent.name}</div>
       </div>
       <div id="all-info-container">
-        <ShipDashboard player={gameState.player} ownBoard={true}/>
-        <BoardContainer player={gameState.player} ownBoard={true}/>
-        <ShipDashboard player={gameState.opponent}/>
-        <BoardContainer player={gameState.opponent}/>
+        <ShipDashboard key={'x1'} player={gameState.player} ownBoard={true}/>
+        <BoardContainer key={'y1'} player={gameState.player} ownBoard={true}/>
+        <ShipDashboard key={'x2'} player={gameState.opponent}/>
+        <BoardContainer key={'y2'} player={gameState.opponent}/>
       </div>
       <GameLog messages={gameState.gameLog} />
     </div>

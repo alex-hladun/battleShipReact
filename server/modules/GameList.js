@@ -24,9 +24,7 @@ class GameList {
   }
 
   delRoom(name) {
-    console.log('org roomList: ', this.roomList)
     delete this.onlineRoomList[name]
-    console.log('new roomList: ', this.roomList)
   }
 
   // Sends the updated room list to all clients in the 'lobby'

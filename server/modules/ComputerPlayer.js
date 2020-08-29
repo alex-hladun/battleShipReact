@@ -28,8 +28,6 @@ class ComputerPlayer extends Player {
   }
 
   randomizeBoard() {
-    console.log('Computer before random', this.board)
-    console.log('Computer before random', this.shipList)
     for (const ship in this.shipList) {
       const randHz = (Math.floor(Math.random() * 2) === 0);
       this.shipList[ship].horizontal = randHz;
@@ -52,15 +50,11 @@ class ComputerPlayer extends Player {
           this.board[row + i][col] = Number(ship) + 1;
         }
       }
-      // console.log('Random computer board', this.board)
     }
   }
 
   checkEligible(row, col, ship) {
     const shipLen = ship.length;
-
-    console.log(`Cheking eligicle row ${row} col ${col}`)
-    console.log('Ship in check elg', ship);
     if (ship.horizontal) {
       for (let i = 0; i < shipLen; i++) {
         if (this.board[row][col + i] !== "O" || this.board[row][col + i] === undefined) {
@@ -96,9 +90,7 @@ class ComputerPlayer extends Player {
               this.potentialMoves.push(this.getRandomTarget());
             case 1:
               this.potentialMoves.push(this.getRandomTarget());
-              this.potentialMoves.push(this.getRandomTarget());
             case 2:
-              this.potentialMoves.push(this.getRandomTarget());
               this.potentialMoves.push(this.getRandomTarget());
               break;
           }
@@ -114,15 +106,9 @@ class ComputerPlayer extends Player {
 
   computerAttack(enemy, io, gameID) {
     const randIndex = Math.round(Math.random() * (this.potentialMoves.length - 1));
-    // console.log('potential moves', this.potentialMoves)
     const randMove = this.potentialMoves.splice(randIndex, 1);
-    console.log('randMove', randMove)
     const colID = this.convertColToNum(randMove[0].slice(0, 1));
     const rowID = randMove[0].slice(1, randMove[0].length) - 1;
-
-    console.log('col ID for comp attack', colID)
-    console.log('row ID for comp attack', rowID)
-
 
     let validShot = this.attack(enemy, rowID, colID, io, gameID);
     while (!validShot) {

@@ -27,8 +27,8 @@ export default function Lobby() {
   const gameListKeys = Object.keys(lobbyState.gameList)
   const gameList = gameListKeys.map((game: string, index) => {
     return (
-      <div>
-    <span className="info-banner info-box settings-button" onClick={() => joinLobbyGame(lobbyState.gameList[game].name)}>{lobbyState.gameList[game].name}</span>
+      <div key={'lobby-div' + index}>
+    <span key={'lobby-game' + index} className="info-banner info-box settings-button" onClick={() => joinLobbyGame(lobbyState.gameList[game].name)}>{lobbyState.gameList[game].name}</span>
     {/* <span>{lobbyState.gameList[game].host.name}</span> */}
     </div>
     )

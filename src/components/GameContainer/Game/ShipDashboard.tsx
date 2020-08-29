@@ -2,10 +2,10 @@ import React from 'react';
 import ShipRow from './ShipRow';
 
 export default function ShipDashboard({ player }: any) {
-  const shipRows = player.shipList.map((ship: any) => {
+  const shipRows = player.shipList.map((ship: any, index: number) => {
     return (
-    <div className="ship-row">
-      <ShipRow ship={ship}/>
+    <div key={'ship-row-group'+index} className="ship-row">
+      <ShipRow key={'ship-row-'+index} ship={ship}/>
     </div>
     )
   })

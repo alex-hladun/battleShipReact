@@ -16,7 +16,6 @@ export default React.memo(function BoardCell({ row, col, boardSize, ownBoard }: 
   const dispatch = useDispatch()
 
   let cellClasses;
-  // console.log(ownBoard)
 
   const checkEligible = (row: number, col: number) => {
     if (cellState.hz) {
@@ -103,7 +102,7 @@ export default React.memo(function BoardCell({ row, col, boardSize, ownBoard }: 
 
       // Increase the ship index
       dispatch(increaseShipIndex())
-    } else if (!ownBoard && gameState.gameStatus === 'Your Turn') {
+    } else if (!ownBoard && gameState.gameStatus === 'Your Turn' && gameState.opponent.board[row - 1][col - 1] === 'O') {
       dispatch(attackEnemy({
         game: gameState.gameID,
         col: col - 1,

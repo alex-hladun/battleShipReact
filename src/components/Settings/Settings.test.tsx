@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, getByTestId, getByText } from '@testing-library/react';
 import Settings from './Settings';
-import store from '../store/index'
+import store from '../../store/index'
 import { TypedUseSelectorHook, useSelector, useDispatch, Provider } from 'react-redux'
 
 

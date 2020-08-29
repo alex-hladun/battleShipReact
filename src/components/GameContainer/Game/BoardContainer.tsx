@@ -26,7 +26,6 @@ export default React.memo(function BoardContainer({ playerDetails, ownBoard = fa
   useEffect(() => {
     if (cellState.shipIndex > 4 && ownBoard && gameState.gameStatus === 'Place your ships') {
       dispatch(setGameStatus('Ready'))
-      console.log('sending game BOARD')
       dispatch(sendBoard({
         game: gameState.gameID,
         user: gameState.player.name,
@@ -56,19 +55,19 @@ export default React.memo(function BoardContainer({ playerDetails, ownBoard = fa
   const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
   const cellRowLabels = emptyBoardSizeArray.map((arr, index) => {
     return (
-      <div className="cell-row-label">{alphabet[index].toLocaleUpperCase()}</div>
+      <div key={'cell-label' + index} className="cell-row-label">{alphabet[index].toLocaleUpperCase()}</div>
     )
   })
   const cellColumnLabels = emptyBoardSizeArray.map((arr, index) => {
     return (
-      <div className="cell-row-label">{index + 1}</div>
+      <div key={'cell-row-label' + index} className="cell-row-label">{index + 1}</div>
     )
   })
 
   const boardRows = emptyBoardSizeArray.map((arr, index) => {
     return (
-      <div className="board-row-label">
-        <BoardRow boardSize={gameState.boardSize} row={index + 1} ownBoard={ownBoard} />
+      <div key={'board-div-label' + index} className="board-row-label">
+        <BoardRow key={'board-row-label' + index} boardSize={gameState.boardSize} row={index + 1} ownBoard={ownBoard} />
       </div>
     )
   })
