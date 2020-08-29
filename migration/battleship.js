@@ -133,29 +133,29 @@
     }
   }
 
-//   generateComputerMoves(enemy) {
-//     const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-//     for (const row in enemy.board) {
-//       for (const col in enemy.board[row]) {
-//         if (enemy.board[row][col] !== 'O') {
-//           const colID = alphabet[col];
-//           const rowID = Number(row) + 1;
-//           this.potentialMoves.push(colID + rowID);
-//           switch (enemy.difficulty) {
-//           case 0:
-//             this.potentialMoves.push(this.getRandomCell());
-//           case 1:
-//             this.potentialMoves.push(this.getRandomCell());
-//             this.potentialMoves.push(this.getRandomCell());
-//           case 2:
-//             this.potentialMoves.push(this.getRandomCell());
-//             this.potentialMoves.push(this.getRandomCell());
-//             break;
-//           }
-//         }
-//       }
-//     }
-//   }
+  // generateComputerMoves(enemy) {
+  //   const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+  //   for (const row in enemy.board) {
+  //     for (const col in enemy.board[row]) {
+  //       if (enemy.board[row][col] !== 'O') {
+  //         const colID = alphabet[col];
+  //         const rowID = Number(row) + 1;
+  //         this.potentialMoves.push(colID + rowID);
+  //         switch (enemy.difficulty) {
+  //         case 0:
+  //           this.potentialMoves.push(this.getRandomCell());
+  //         case 1:
+  //           this.potentialMoves.push(this.getRandomCell());
+  //           this.potentialMoves.push(this.getRandomCell());
+  //         case 2:
+  //           this.potentialMoves.push(this.getRandomCell());
+  //           this.potentialMoves.push(this.getRandomCell());
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
 //   convertColToNum(col) {
 //     const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');

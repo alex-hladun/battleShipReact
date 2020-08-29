@@ -11,16 +11,20 @@
 //   board: never[];
 //   shipList: Array<Ship>
 // }
-class ComputerGame {
-  constructor(name, boardSize, host, difficulty, ) {
-    this.name = name;
-    this.boardSize = boardSize;
-    this.host = host;
+
+const { OnlineGame } = require("./OnlineGame");
+const { ComputerPlayer } = require('./ComputerPlayer')
+
+class ComputerGame extends OnlineGame {
+  constructor(gameName, boardSize, hostName, shipList, difficulty) {
+    super(gameName, boardSize, hostName, shipList)
     this.difficulty = difficulty;
-    this.hostTurn = null;
+    this.opponent = new ComputerPlayer('Computer', shipList, boardSize, difficulty)
+    this.opponent.generateComputerMoves(this.host);
   }
 
 }
-// module.exports= {
-//   ComputerGame
-// }
+
+module.exports= {
+  ComputerGame
+}

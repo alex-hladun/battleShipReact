@@ -1,13 +1,13 @@
-const e = require("express");
 
 /* eslint-disable no-array-constructor */
 class Player {
-  constructor(name, shipList, boardSize) {
+  constructor(name, shipList, boardSize, difficulty = 0) {
     this.name = name;
     this.shipList = shipList;
     this.totalHits = 0;
     this.totalShipTargets = 0;
     this.board = [];
+    this.difficulty = difficulty;
     this.totalTargets();
     this.resetBoard(boardSize);
     this.alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
@@ -15,6 +15,7 @@ class Player {
 
   resetBoard(boardSize) {
     this.board = [];
+    this.potentialMoves = [];
     for (const ship in this.shipList) {
       this.shipList[ship].hitCount = 0;
     }
@@ -40,32 +41,7 @@ class Player {
 
 
 
-  checkEligible(cell, ship) {
-    const colID = this.convertColToNum(cell.slice(0, 1));
-    const rowID = cell.slice(1, cell.length) - 1;
-    const shipLen = ship.length;
-
-    if (ship.horizontal) {
-      for (let i = 0; i < shipLen; i++) {
-        if (this.board[rowID][colID + i] !== "O" || this.board[rowID][colID + i] === undefined) {
-          return false;
-        }
-      }
-      return true;
-    } else {
-      for (let i = 0; i < shipLen; i++) {
-        // Checks that cell exists and is open.
-        if (!this.board[rowID + i]) {
-          return false;
-        }
-        if (this.board[rowID + i][colID] !== "O" || this.board[rowID + i][colID] === undefined) {
-          return false;
-        }
-      }
-      return true;
-    }
-  }
-
+  
   convertColToNum(col) {
     const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
     return alphabet.indexOf(col.toLowerCase());
@@ -74,8 +50,8 @@ class Player {
   attack(enemy, targetRow, targetCol, io, gameID) {
     // Where targetRow/Col are the index
     const shotTarget = enemy.board[targetRow][targetCol];
-    console.log('enemy board', enemy.board)
-    console.log(`Shot at ${enemy.name} ${targetCol} - ${targetRow} - Result ${shotTarget}`)
+    // console.log('enemy board', enemy.board)
+    // console.log(`Shot at ${enemy.name} ${targetCol} - ${targetRow} - Result ${shotTarget}`)
     switch (shotTarget) {
       case 'O':
         enemy.board[targetRow][targetCol] = "M";
@@ -88,12 +64,12 @@ class Player {
           },
           currentTurn: enemy.name,
           message: `${this.name.toLocaleUpperCase()} fired at ${this.alphabet[targetCol].toLocaleUpperCase()}${targetRow + 1}. MISS!`
-        })
-        break;
-      case 'X':
-        break;
-      case "M":
-        break;
+        });
+        return true;
+        case 'X':
+        return false;
+          case "M":
+        return false;
       default:
         // This will assign the ship to the ghost board, so that the ship dashboard can update properly.
         enemy.shipList[shotTarget - 1].hitCount++;
@@ -129,7 +105,7 @@ class Player {
             winner: this.name
           })
         }
-      // return false;
+      return true;
     }
   }
 

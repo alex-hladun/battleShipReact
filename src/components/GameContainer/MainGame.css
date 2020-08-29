@@ -53,8 +53,27 @@
 #game-info-bar {
   display: flex;
   flex-direction: row;
+  justify-content: space-evenly;
   width: 100%;
   font-size: 2rem;
+}
+
+.game-info-bar-spacer {
+  width: 120px;
+}
+.game-info-bar-spacer-large {
+  width: 20%;
+}
+
+#player-above-label {
+  text-align: center;
+  width: 350px;
+}
+#cpu-above-label {
+  /* width: 30%; */
+  text-align: center;
+  width: 350px;
+
 }
 
 .info-box{
@@ -127,14 +146,7 @@
   flex: 1;
 }
 
-#player-above-label {
-  position: relative;
-  left: 22.5rem; 
-}
-#cpu-above-label {
-  position: relative;
-  left: 52rem; 
-}
+
 
 .hover-red:hover {
   background-color:rgb(255, 0, 0) !important;
@@ -266,15 +278,6 @@
   color: black;
 }
 
-
-
-.player-cell {
-
-}
-
-.computer-cell {
-
-}
 
 .page-body {
   background-color: black;

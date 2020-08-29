@@ -103,9 +103,7 @@ export const gameStateSlice = createSlice({
       state.opponent.shipList = state.player.shipList
     },
     resetGameState: (state) => {
-      const playerName = state.player.name
-      state = initialState;
-      state.player.name = playerName
+      Object.assign(state, initialState)
     },
     placeShip: (state, action) => {
       if (action.payload.hz) {

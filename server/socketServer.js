@@ -34,39 +34,50 @@ module.exports = {
             gameManager.sendRoomUpdate(io)
             break;
           case 'computer':
-            gameManager.newComputerRoom(genRanString(), data.payload.boardSize, data.payload.host, data.payload.difficulty);
+            gameManager.newComputerRoom(data.payload.gameName, data.payload.boardSize, data.payload.username, data.payload.shipList, data.payload.difficulty);
+            io.to(data.payload.gameName).emit("set_game_id", {
+              gameID: data.payload.gameName
+            })
             break;
           default:
             break;
         }
-
-        // console.log(gameManager.onlineRoomList)
       })
 
       socket.on('donePlacing', data => {
         console.log('done placing data', data)
-        // console.log(gameManager.onlineRoomList[data.game])
-        if (gameManager.onlineRoomList[data.game].host.name === data.user) {
-          gameManager.onlineRoomList[data.game].host.board = data.board;
-          console.log('host board', gameManager.onlineRoomList[data.game].host.board)
-          gameManager.onlineRoomList[data.game].hostReady = true;
-          console.log(gameManager.onlineRoomList[data.game]);
-        } else if (gameManager.onlineRoomList[data.game].opponent.name === data.user) {
-          gameManager.onlineRoomList[data.game].opponent.board = data.board;
-          console.log('opponent board', gameManager.onlineRoomList[data.game].opponent.board)
-          gameManager.onlineRoomList[data.game].opponentReady = true;
-        }
-        gameManager.sendGameMessage(io, data.game, `${data.user} has finished placing their ships.`)
 
-        gameManager.onlineRoomList[data.game].checkBothReady()
-        if (gameManager.onlineRoomList[data.game].checkBothReady()) {
-          if (Math.random() > 0.5) {
-            gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].host.name
-          } else {
-            gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].opponent.name
+        // Check if game is online or computer
+        if (gameManager.onlineRoomList[data.game]) {
+          if (gameManager.onlineRoomList[data.game].host.name === data.user) {
+            gameManager.onlineRoomList[data.game].host.board = data.board;
+            console.log('host board', gameManager.onlineRoomList[data.game].host.board)
+            gameManager.onlineRoomList[data.game].hostReady = true;
+            console.log(gameManager.onlineRoomList[data.game]);
+          } else if (gameManager.onlineRoomList[data.game].opponent.name === data.user) {
+            gameManager.onlineRoomList[data.game].opponent.board = data.board;
+            console.log('opponent board', gameManager.onlineRoomList[data.game].opponent.board)
+            gameManager.onlineRoomList[data.game].opponentReady = true;
           }
-          gameManager.sendGameMessage(io, data.game, `Both players ready! ${gameManager.onlineRoomList[data.game].currentTurn} goes first.`)
-          gameManager.onlineRoomList[data.game].startGame(io)
+          gameManager.sendGameMessage(io, data.game, `${data.user} has finished placing their ships.`)
+  
+          gameManager.onlineRoomList[data.game].checkBothReady()
+          if (gameManager.onlineRoomList[data.game].checkBothReady()) {
+            if (Math.random() > 0.5) {
+              gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].host.name
+            } else {
+              gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].opponent.name
+            }
+            gameManager.sendGameMessage(io, data.game, `Both players ready! ${gameManager.onlineRoomList[data.game].currentTurn} goes first.`)
+            gameManager.onlineRoomList[data.game].startGame(io)
+          }
+
+          // In case of an online game
+        } else if (gameManager.computerRoomList[data.game]) {
+          gameManager.computerRoomList[data.game].host.board = data.board;
+          gameManager.computerRoomList[data.game].hostReady = true;
+
+
         }
 
       })
@@ -116,7 +127,6 @@ module.exports = {
         gameManager.sendRoomUpdate(io)
       })
 
-
       socket.on('attack', data => {
         if (gameManager.onlineRoomList[data.game].host.name === data.user && gameManager.onlineRoomList[data.game].currentTurn === data.user) {
           gameManager.onlineRoomList[data.game].host.attack(gameManager.onlineRoomList[data.game].opponent, data.row, data.col, io, data.game)
@@ -126,11 +136,6 @@ module.exports = {
           gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].host.name
         }
       })
-
-      
-
-
-
     })
   }
 }

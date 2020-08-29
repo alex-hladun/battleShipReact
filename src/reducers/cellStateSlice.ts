@@ -31,7 +31,7 @@ export const cellStateSlice = createSlice({
       }
     },
     resetCellState: (state) => {
-      state = initialState;
+      Object.assign(state, initialState)
     }
   },
 })

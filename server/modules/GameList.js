@@ -1,5 +1,5 @@
 const { OnlineGame } = require('./OnlineGame')
-const {ComputerGame} = require('./ComputerGame')
+const { ComputerGame } = require('./ComputerGame')
 
 class GameList {
   constructor(socket) {
@@ -16,10 +16,10 @@ class GameList {
     return r;
   }
 
-  newComputerRoom(name, boardSize, host, difficulty) {
-    let r = new ComputerGame(name, boardSize, host, difficulty);
+  newComputerRoom(gameName, boardSize, hostName, difficulty) {
+    let r = new ComputerGame(gameName, boardSize, hostName, difficulty);
     this.computerRoomList[r.name] = r;
-    this.socketDirectory[name] = [r.name]
+    this.socketDirectory[hostName] = [r.name]
     return r;
   }
 

@@ -30,7 +30,7 @@ export default function GameContainer() {
     <div id="game-container" style={{ display: 'flex', flexDirection: 'column' }}>
     {gameState.winner &&  
       <div id="game-over-banner" className="show">
-        Game Over!
+        {gameState.winner} WINS!
       </div>
     }
       <div id="upper-info-bar">
@@ -38,7 +38,9 @@ export default function GameContainer() {
         <div id="turn-indicator" className="info-box info-banner">{gameState.gameStatus}</div>
       </div>
       <div id="game-info-bar">
+        <div className="game-info-bar-spacer"></div>
         <div id="player-above-label">{gameState.player.name} (you)</div>
+        <div className="game-info-bar-spacer"></div>
         <div id="cpu-above-label">{gameState.opponent.name}</div>
       </div>
       <div id="all-info-container">

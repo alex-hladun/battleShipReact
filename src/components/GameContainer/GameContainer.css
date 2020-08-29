@@ -217,12 +217,12 @@ td, th {
   width: 120px;
   height: 300px;
   padding-top: 40px;
-  /* border: 1px solid chartreuse; */
   align-items: center;
   justify-content: space-around;
   display: flex;
   flex-direction: column;
 }
+
 
 .ship-row {
   display: flex;

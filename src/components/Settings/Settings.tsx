@@ -9,7 +9,6 @@ import { State, Ship } from '../../store/types'
 export default function Settings() {
   const typedUseSlector: TypedUseSelectorHook<State> = useSelector;
   const gameState = typedUseSlector(state => state.gameState)
-  // const viewModeState = typedUseSlector(state => state.viewState)
   const dispatch = useDispatch()
 
   const shipList = gameState.player.shipList.map((ship: Ship, index: number) => {
@@ -76,6 +75,21 @@ export default function Settings() {
     dispatch(transitionToGame())
   }
 
+  const playWithComputer = () => {
+    dispatch(startNewGame({
+      type: 'computer',
+      payload: {
+        boardSize: gameState.boardSize,
+        username: gameState.player.name,
+        shipList: gameState.player.shipList,
+        gameName: 'game' + (Math.random()*10000).toFixed(0),
+        difficulty: gameState.difficulty
+      }
+    }))
+    dispatch(resetBoard())
+    dispatch(transitionToGame())
+  }
+
   return (
     <div id="game-container" style={{ display: 'flex', flexDirection: 'column' }}>
       <article className="info-box info-banner">BATTLESHIP</article>
@@ -131,9 +145,8 @@ export default function Settings() {
         </div>
         <div id="setting-row2" className="setting-row">
           <span className="info-banner info-box settings-button" onClick={playWithFriend}>Play Online</span>
-          <span id="btn-play-cpu" className="info-banner info-box settings-button">Play Computer</span>
+          <span id="btn-play-cpu" className="info-banner info-box settings-button" onClick={playWithComputer}>Play Computer</span>
         </div>
-
       </article>
     </div>
   )
