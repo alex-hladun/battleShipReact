@@ -1,0 +1,5 @@
+{
+  "collectCoverageFrom": [
+    "**/*.{js,jsx}"
+  ]
+}

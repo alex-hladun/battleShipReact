@@ -10,6 +10,10 @@ const classNames = require('classnames');
 export default React.memo(function BoardCell({ row, col, boardSize, ownBoard }: any) {
 
 
+  console.log("BoardCell -> col", col)
+  console.log("BoardCell -> row", row)
+  console.log("BoardCell -> ownBoard", ownBoard)
+
   const typedUseSlector: TypedUseSelectorHook<State> = useSelector;
   const cellState = typedUseSlector(state => state.cellState)
   const gameState = typedUseSlector(state => state.gameState)
@@ -114,7 +118,7 @@ export default React.memo(function BoardCell({ row, col, boardSize, ownBoard }: 
   }
 
   return (
-    <div className={cellClasses} onMouseOver={() => mouseHover(row, col)} onClick={() => handleCellClick(row, col)}></div>
+    <div data-testid="test-board-cell" className={cellClasses} onMouseOver={() => mouseHover(row, col)} onClick={() => handleCellClick(row, col)}></div>
   )
 
 })

@@ -122,7 +122,7 @@ export default function Settings() {
             </article>
 
             <div className="ticker-box-outer">
-              <div id="setting-del-bsi" className="ticker-box" onClick={(handleBoardSizeDecrease)}>
+              <div id="setting-del-bsi" data-testid="dec-board-size" className="ticker-box" onClick={(handleBoardSizeDecrease)}>
                 -
           </div>
               <div id="setting-add-bsi" data-testid="inc-board-size" className="ticker-box" onClick={handleBoardSizeIncrease}>
@@ -135,7 +135,7 @@ export default function Settings() {
             </article>
 
             <div className="ticker-box-outer">
-              <div id="setting-del-dif" className="ticker-box" onClick={(handleDifficultyDecrease)}>
+              <div id="setting-del-dif" className="ticker-box" data-testid="dec-difficulty" onClick={(handleDifficultyDecrease)}>
                 -
           </div>
               <div id="setting-add-dif" className="ticker-box" data-testid="inc-difficulty" onClick={(handleDifficultyIncrease)}>
@@ -147,7 +147,7 @@ export default function Settings() {
         </div>
         <div id="setting-row2" className="setting-row">
           <span className="info-banner info-box settings-button" onClick={playWithFriend}>Play Online</span>
-          <span id="btn-play-cpu" className="info-banner info-box settings-button" onClick={playWithComputer}>Play Computer</span>
+          <span id="btn-play-cpu" data-testid="start-cpu-game" className="info-banner info-box settings-button" onClick={playWithComputer}>Play Computer</span>
         </div>
       </article>
     </div>
