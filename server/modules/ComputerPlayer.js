@@ -5,58 +5,65 @@ const { Player } = require('./Player')
 class ComputerPlayer extends Player {
 
   constructor(name, shipList, boardSize, difficulty) {
-    super(name, shipList, boardSize)
+    super(name, shipList, boardSize, difficulty)
     this.shipList = shipList;
     this.potentialMoves = [];
+    this.difficulty = difficulty;
     this.randomizeBoard();
   }
 
   getRandomCell() {
-    let randCell = "";
-    let alpha = Math.round(Math.random() * (this.boardSize - 1));
-    let num = Math.ceil(Math.random() * (this.boardSize));
-    randCell += this.alphabet[alpha] + num;
-
+    let randCell = Math.floor(Math.random() * (this.boardSize));
     return randCell;
+  }
+
+  getRandomRow() {
+    return Math.ceil(Math.random() * (this.boardSize)) - 1;
+  }
+
+  getRandomTarget() {
+    const randCol = this.alphabet[this.getRandomCell()];
+    const randrow = this.getRandomRow() + 1;
+    return (randCol + randrow)
   }
 
   randomizeBoard() {
     console.log('Computer before random', this.board)
+    console.log('Computer before random', this.shipList)
     for (const ship in this.shipList) {
       const randHz = (Math.floor(Math.random() * 2) === 0);
       this.shipList[ship].horizontal = randHz;
       const shipLen = this.shipList[ship].length;
-      let cell = this.getRandomCell();
-      let validPlacement = this.checkEligible(cell, this.shipList[ship]);
+      let row = this.getRandomRow();
+      let col = this.getRandomCell();
+      let validPlacement = this.checkEligible(row, col, this.shipList[ship]);
       while (!validPlacement) {
-        cell = this.getRandomCell();
-        validPlacement = this.checkEligible(cell, this.shipList[ship]);
+        row = this.getRandomRow();
+        col = this.getRandomCell();
+        validPlacement = this.checkEligible(row, col, this.shipList[ship]);
       }
-
-      const colID = this.convertColToNum(cell.slice(0, 1));
-      const rowID = cell.slice(1, 2) - 1;
 
       if (this.shipList[ship].horizontal) {
         for (let i = 0; i < shipLen; i++) {
-          this.board[rowID][colID + i] = ship;
+          this.board[row][col + i] = Number(ship) + 1;
         }
       } else {
         for (let i = 0; i < shipLen; i++) {
-          this.board[rowID + i][colID] = ship;
+          this.board[row + i][col] = Number(ship) + 1;
         }
       }
+      // console.log('Random computer board', this.board)
     }
-    console.log('Random computer board', this.board)
   }
 
-  checkEligible(cell, ship) {
-    const colID = this.convertColToNum(cell.slice(0, 1));
-    const rowID = cell.slice(1, cell.length) - 1;
+  checkEligible(row, col, ship) {
     const shipLen = ship.length;
 
+    console.log(`Cheking eligicle row ${row} col ${col}`)
+    console.log('Ship in check elg', ship);
     if (ship.horizontal) {
       for (let i = 0; i < shipLen; i++) {
-        if (this.board[rowID][colID + i] !== "O" || this.board[rowID][colID + i] === undefined) {
+        if (this.board[row][col + i] !== "O" || this.board[row][col + i] === undefined) {
           return false;
         }
       }
@@ -64,10 +71,10 @@ class ComputerPlayer extends Player {
     } else {
       for (let i = 0; i < shipLen; i++) {
         // Checks that cell exists and is open.
-        if (!this.board[rowID + i]) {
+        if (!this.board[row + i]) {
           return false;
         }
-        if (this.board[rowID + i][colID] !== "O" || this.board[rowID + i][colID] === undefined) {
+        if (this.board[row + i][col] !== "O" || this.board[row + i][col] === undefined) {
           return false;
         }
       }
@@ -75,23 +82,24 @@ class ComputerPlayer extends Player {
     }
   }
 
-
   generateComputerMoves(enemy) {
+    console.log('computer diff', this.difficulty)
     for (const row in enemy.board) {
       for (const col in enemy.board[row]) {
         if (enemy.board[row][col] !== 'O') {
           const colID = this.alphabet[col];
           const rowID = Number(row) + 1;
           this.potentialMoves.push(colID + rowID);
-          switch (enemy.difficulty) {
+          console.log(this.potentialMoves)
+          switch (this.difficulty) {
             case 0:
-              this.potentialMoves.push(this.getRandomCell());
+              this.potentialMoves.push(this.getRandomTarget());
             case 1:
-              this.potentialMoves.push(this.getRandomCell());
-              this.potentialMoves.push(this.getRandomCell());
+              this.potentialMoves.push(this.getRandomTarget());
+              this.potentialMoves.push(this.getRandomTarget());
             case 2:
-              this.potentialMoves.push(this.getRandomCell());
-              this.potentialMoves.push(this.getRandomCell());
+              this.potentialMoves.push(this.getRandomTarget());
+              this.potentialMoves.push(this.getRandomTarget());
               break;
           }
         }
@@ -101,15 +109,24 @@ class ComputerPlayer extends Player {
   }
 
   convertColToNum(col) {
-    return this.alphabet.indexOf(col.toLowerCase());
+    return this.alphabet.indexOf(col);
   }
 
-  computerAttack(target) {
+  computerAttack(enemy, io, gameID) {
     const randIndex = Math.round(Math.random() * (this.potentialMoves.length - 1));
+    // console.log('potential moves', this.potentialMoves)
     const randMove = this.potentialMoves.splice(randIndex, 1);
-    let validShot = this.attack(target, randMove[0]);
+    console.log('randMove', randMove)
+    const colID = this.convertColToNum(randMove[0].slice(0, 1));
+    const rowID = randMove[0].slice(1, randMove[0].length) - 1;
+
+    console.log('col ID for comp attack', colID)
+    console.log('row ID for comp attack', rowID)
+
+
+    let validShot = this.attack(enemy, rowID, colID, io, gameID);
     while (!validShot) {
-      validShot = this.attack(target, this.getRandomCell());
+      validShot = this.attack(enemy, this.getRandomRow(), this.getRandomCell(), io, gameID);
     }
   }
 

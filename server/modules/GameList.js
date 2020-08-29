@@ -16,8 +16,8 @@ class GameList {
     return r;
   }
 
-  newComputerRoom(gameName, boardSize, hostName, difficulty) {
-    let r = new ComputerGame(gameName, boardSize, hostName, difficulty);
+  newComputerRoom(gameName, boardSize, hostName, shipList, difficulty) {
+    let r = new ComputerGame(gameName, boardSize, hostName, shipList, difficulty);
     this.computerRoomList[r.name] = r;
     this.socketDirectory[hostName] = [r.name]
     return r;

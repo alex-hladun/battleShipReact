@@ -3,6 +3,7 @@
 class Player {
   constructor(name, shipList, boardSize, difficulty = 0) {
     this.name = name;
+    this.boardSize = boardSize;
     this.shipList = shipList;
     this.totalHits = 0;
     this.totalShipTargets = 0;
@@ -27,31 +28,19 @@ class Player {
     }
     for (let i = 0; i < boardSize; i++) {
       const rowD = [...row];
-      // console.log(rowD);
       this.board.push(rowD);
     }
   }
 
   totalTargets() {
-    // console.log('Calling totalTargets')
     for (const ship in this.shipList) {
       this.totalShipTargets += this.shipList[ship].length;
     }
   };
 
-
-
-  
-  convertColToNum(col) {
-    const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
-    return alphabet.indexOf(col.toLowerCase());
-  }
-
   attack(enemy, targetRow, targetCol, io, gameID) {
     // Where targetRow/Col are the index
     const shotTarget = enemy.board[targetRow][targetCol];
-    // console.log('enemy board', enemy.board)
-    // console.log(`Shot at ${enemy.name} ${targetCol} - ${targetRow} - Result ${shotTarget}`)
     switch (shotTarget) {
       case 'O':
         enemy.board[targetRow][targetCol] = "M";
@@ -66,17 +55,16 @@ class Player {
           message: `${this.name.toLocaleUpperCase()} fired at ${this.alphabet[targetCol].toLocaleUpperCase()}${targetRow + 1}. MISS!`
         });
         return true;
-        case 'X':
+      case 'X':
         return false;
-          case "M":
+      case "M":
+        return false;
+      case undefined:
         return false;
       default:
-        // This will assign the ship to the ghost board, so that the ship dashboard can update properly.
         enemy.shipList[shotTarget - 1].hitCount++;
         this.totalHits++;
-
         enemy.board[targetRow][targetCol] = "X";
-
         io.to(gameID).emit('updateGame', {
           attackResults: {
             user: enemy.name,
@@ -92,7 +80,6 @@ class Player {
           }
         })
 
-
         // Sunk ship Message
         if (enemy.shipList[shotTarget - 1].hitCount === enemy.shipList[shotTarget - 1].length) {
           io.to(gameID).emit('updateGame', {
@@ -105,12 +92,9 @@ class Player {
             winner: this.name
           })
         }
-      return true;
+        return true;
     }
   }
-
-
-
 }
 
 module.exports = {

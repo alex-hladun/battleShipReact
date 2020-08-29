@@ -1,8 +1,5 @@
-const { OnlineGame } = require('./modules/OnlineGame')
-const { ComputerGame } = require('./modules/ComputerGame')
 const { GameList } = require('./modules/GameList')
 const socketIO = require('socket.io')
-const { Player } = require('./modules/Player')
 
 module.exports = {
   newSocketServer: function (http) {
@@ -11,11 +8,6 @@ module.exports = {
     console.log('Starting socket server...')
 
     const gameManager = new GameList(io)
-
-    const genRanString = () => {
-      return 'game' + (Math.random() * 1000000).toFixed(0)
-    }
-
 
     io.sockets.on("connection", function (socket) {
       // Send roomList to each new participant
@@ -34,52 +26,19 @@ module.exports = {
             gameManager.sendRoomUpdate(io)
             break;
           case 'computer':
+            console.log('diff in socketServer', data.payload.difficulty)
             gameManager.newComputerRoom(data.payload.gameName, data.payload.boardSize, data.payload.username, data.payload.shipList, data.payload.difficulty);
             io.to(data.payload.gameName).emit("set_game_id", {
               gameID: data.payload.gameName
+            })
+            io.to(data.payload.gameName).emit('updateGame', {
+              opponentName: 'Computer',
+              message: `Computer is ready.`
             })
             break;
           default:
             break;
         }
-      })
-
-      socket.on('donePlacing', data => {
-        console.log('done placing data', data)
-
-        // Check if game is online or computer
-        if (gameManager.onlineRoomList[data.game]) {
-          if (gameManager.onlineRoomList[data.game].host.name === data.user) {
-            gameManager.onlineRoomList[data.game].host.board = data.board;
-            console.log('host board', gameManager.onlineRoomList[data.game].host.board)
-            gameManager.onlineRoomList[data.game].hostReady = true;
-            console.log(gameManager.onlineRoomList[data.game]);
-          } else if (gameManager.onlineRoomList[data.game].opponent.name === data.user) {
-            gameManager.onlineRoomList[data.game].opponent.board = data.board;
-            console.log('opponent board', gameManager.onlineRoomList[data.game].opponent.board)
-            gameManager.onlineRoomList[data.game].opponentReady = true;
-          }
-          gameManager.sendGameMessage(io, data.game, `${data.user} has finished placing their ships.`)
-  
-          gameManager.onlineRoomList[data.game].checkBothReady()
-          if (gameManager.onlineRoomList[data.game].checkBothReady()) {
-            if (Math.random() > 0.5) {
-              gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].host.name
-            } else {
-              gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].opponent.name
-            }
-            gameManager.sendGameMessage(io, data.game, `Both players ready! ${gameManager.onlineRoomList[data.game].currentTurn} goes first.`)
-            gameManager.onlineRoomList[data.game].startGame(io)
-          }
-
-          // In case of an online game
-        } else if (gameManager.computerRoomList[data.game]) {
-          gameManager.computerRoomList[data.game].host.board = data.board;
-          gameManager.computerRoomList[data.game].hostReady = true;
-
-
-        }
-
       })
 
       socket.on('joinGame', data => {
@@ -104,8 +63,55 @@ module.exports = {
         }
       })
 
+      socket.on('donePlacing', data => {
+        console.log('done placing data', data)
+
+        // Check if game is online or computer
+        if (gameManager.onlineRoomList[data.game]) {
+          if (gameManager.onlineRoomList[data.game].host.name === data.user) {
+            gameManager.onlineRoomList[data.game].host.board = data.board;
+            console.log('host board', gameManager.onlineRoomList[data.game].host.board)
+            gameManager.onlineRoomList[data.game].hostReady = true;
+            console.log(gameManager.onlineRoomList[data.game]);
+          } else if (gameManager.onlineRoomList[data.game].opponent.name === data.user) {
+            gameManager.onlineRoomList[data.game].opponent.board = data.board;
+            console.log('opponent board', gameManager.onlineRoomList[data.game].opponent.board)
+            gameManager.onlineRoomList[data.game].opponentReady = true;
+          }
+          gameManager.sendGameMessage(io, data.game, `${data.user} has finished placing their ships.`)
+          gameManager.onlineRoomList[data.game].checkBothReady()
+          if (gameManager.onlineRoomList[data.game].checkBothReady()) {
+            if (Math.random() > 0.5) {
+              gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].host.name
+            } else {
+              gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].opponent.name
+            }
+            gameManager.sendGameMessage(io, data.game, `Both players ready! ${gameManager.onlineRoomList[data.game].currentTurn} goes first.`)
+            gameManager.onlineRoomList[data.game].startGame(io)
+          }
+
+          // In case of a computer game
+        } else if (gameManager.computerRoomList[data.game]) {
+          gameManager.computerRoomList[data.game].host.board = data.board;
+          gameManager.computerRoomList[data.game].hostReady = true;
+          gameManager.computerRoomList[data.game].opponent.generateComputerMoves(gameManager.computerRoomList[data.game].host);
+          gameManager.computerRoomList[data.game].opponentReady = true;
+          if (Math.random() > 0.5) {
+            gameManager.computerRoomList[data.game].currentTurn = gameManager.computerRoomList[data.game].host.name
+          } else {
+            gameManager.computerRoomList[data.game].currentTurn = gameManager.computerRoomList[data.game].opponent.name
+          }
+          gameManager.sendGameMessage(io, data.game, `Both players ready! ${gameManager.computerRoomList[data.game].currentTurn} goes first.`)
+          gameManager.computerRoomList[data.game].startGame(io);
+
+          if (gameManager.computerRoomList[data.game].currentTurn === gameManager.computerRoomList[data.game].opponent.name) {
+            gameManager.computerRoomList[data.game].opponent.computerAttack(gameManager.computerRoomList[data.game].host, io, data.game)
+          }
+        }
+      })
+
+
       socket.on('leaveGame', data => {
-        console.log('leave game', data)
         gameManager.delRoom(data.game)
         gameManager.socketDirectory[socket.id] = null;
         socket.leave(data.game)
@@ -128,12 +134,19 @@ module.exports = {
       })
 
       socket.on('attack', data => {
-        if (gameManager.onlineRoomList[data.game].host.name === data.user && gameManager.onlineRoomList[data.game].currentTurn === data.user) {
-          gameManager.onlineRoomList[data.game].host.attack(gameManager.onlineRoomList[data.game].opponent, data.row, data.col, io, data.game)
-          gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].opponent.name
-        } else if (gameManager.onlineRoomList[data.game].opponent.name === data.user && gameManager.onlineRoomList[data.game].currentTurn === data.user) {
-          gameManager.onlineRoomList[data.game].opponent.attack(gameManager.onlineRoomList[data.game].host, data.row, data.col, io, data.game)
-          gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].host.name
+        if (gameManager.onlineRoomList[data.game]) {
+          // Online Game
+          if (gameManager.onlineRoomList[data.game].host.name === data.user && gameManager.onlineRoomList[data.game].currentTurn === data.user) {
+            gameManager.onlineRoomList[data.game].host.attack(gameManager.onlineRoomList[data.game].opponent, data.row, data.col, io, data.game)
+            gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].opponent.name
+          } else if (gameManager.onlineRoomList[data.game].opponent.name === data.user && gameManager.onlineRoomList[data.game].currentTurn === data.user) {
+            gameManager.onlineRoomList[data.game].opponent.attack(gameManager.onlineRoomList[data.game].host, data.row, data.col, io, data.game)
+            gameManager.onlineRoomList[data.game].currentTurn = gameManager.onlineRoomList[data.game].host.name
+          }
+        } else if (gameManager.computerRoomList[data.game]) {
+          // Computer game
+          gameManager.computerRoomList[data.game].host.attack(gameManager.computerRoomList[data.game].opponent, data.row, data.col, io, data.game)
+          gameManager.computerRoomList[data.game].opponent.computerAttack( gameManager.computerRoomList[data.game].host, io, data.game)
         }
       })
     })
