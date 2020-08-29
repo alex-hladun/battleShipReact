@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
 // const db = require('./db.js');
 const http = require('http').createServer(app)
-const PORT =  3001
+const PORT = process.env.PORT || 3001
 const path = require('path')
 const socketServer = require('./socketServer').newSocketServer
 

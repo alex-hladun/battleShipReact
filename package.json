@@ -61,7 +61,9 @@
     "eject": "react-scripts eject",
     "dev": "run-p server start",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "tsc": "tsc",
+    "postinstall": "npm run tsc"
   },
   "proxy": "http://127.0.0.1:3001",
   "eslintConfig": {
