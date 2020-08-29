@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, getByTestId, getByText, waitForElement } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import Lobby from './Lobby'
 import { Provider } from 'react-redux'
 import configureStore from 'redux-mock-store';

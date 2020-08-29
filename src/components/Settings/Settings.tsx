@@ -146,7 +146,7 @@ export default function Settings() {
 
         </div>
         <div id="setting-row2" className="setting-row">
-          <span className="info-banner info-box settings-button" onClick={playWithFriend}>Play Online</span>
+          <span className="info-banner info-box settings-button" data-testid="start-online-game" onClick={playWithFriend}>Play Online</span>
           <span id="btn-play-cpu" data-testid="start-cpu-game" className="info-banner info-box settings-button" onClick={playWithComputer}>Play Computer</span>
         </div>
       </article>

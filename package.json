@@ -2,6 +2,9 @@
   "name": "battleship-react-app-ts",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "10.16.1"
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^4.2.4",
@@ -39,7 +42,7 @@
   "type": "module",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "CI= react-scripts build",
     "test": "react-scripts test",
     "server": "node ./server/server.js --exec nodemon | pino-colada",
     "eject": "react-scripts eject",

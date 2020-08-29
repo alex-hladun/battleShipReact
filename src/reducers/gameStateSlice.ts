@@ -95,6 +95,10 @@ export const gameStateSlice = createSlice({
           }
         }
       }
+
+      if (state.boardSize < 7 && state.difficulty < 3) {
+        state.difficulty = 3
+      }
     },
     resetBoard: (state) => {
       const board = [];

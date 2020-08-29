@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, getByTestId, getByText, waitForElement, getAllByTestId } from '@testing-library/react';
+import { render, fireEvent, getAllByTestId } from '@testing-library/react';
 import BoardCell from './BoardCell'
 import { Provider } from 'react-redux'
 import configureStore from 'redux-mock-store';
@@ -148,7 +148,7 @@ describe("BoardCell", () => {
   });
 
   it("should render the gameContainer and dispatch when a cell is clicked", () => {
-    const { getByText, container } = render(
+    const { container } = render(
       <Provider store={store}>
         <BoardCell row={2} col={2} ownBoard={true} />
       </Provider>
@@ -294,7 +294,10 @@ describe("BoardCell", () => {
       }
     });
 
-    const { getByText, container } = render(
+    store2.dispatch = jest.fn();
+
+
+    const { container } = render(
       <Provider store={store2}>
         <BoardCell row={9} col={9} ownBoard={false} boardSize={1} />
       </Provider>
@@ -305,7 +308,7 @@ describe("BoardCell", () => {
     expect(boardCell).toBeInTheDocument()
 
     fireEvent.click(boardCell);
-    expect(store.dispatch).toHaveBeenCalledTimes(0);
+    expect(store2.dispatch).toHaveBeenCalledTimes(1);
 
   })
 
