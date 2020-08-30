@@ -155,7 +155,7 @@ describe("BoardCell", () => {
     );
 
     const boardCell = getAllByTestId(container, 'test-board-cell')[0]
-    console.log(boardCell);
+    // console.log(boardCell);
     expect(boardCell).toBeInTheDocument()
 
     fireEvent.click(boardCell);

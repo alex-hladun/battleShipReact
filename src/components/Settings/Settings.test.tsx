@@ -238,11 +238,11 @@ test("Starts the game", async () => {
   const startComputerGame = getByTestId(container, 'start-cpu-game')
   expect(getByText(startComputerGame, "Play Computer")).toBeInTheDocument();
   fireEvent.click(startComputerGame)
-  expect(store2.dispatch).toHaveBeenCalledTimes(4);
+  expect(store2.dispatch).toHaveBeenCalledTimes(3);
   const startFriendGame = getByTestId(container, 'start-online-game')
   expect(getByText(startFriendGame, "Play Online")).toBeInTheDocument();
   fireEvent.click(startFriendGame)
-  expect(store2.dispatch).toHaveBeenCalledTimes(8);
+  expect(store2.dispatch).toHaveBeenCalledTimes(3);
 
 
 })

@@ -67,7 +67,6 @@ export default function Settings() {
 
   const playWithFriend = () => {
     new Promise((resolve, reject) => {
-      console.log(gameState.player.shipList)
       resolve()
     }).then(() => {
       dispatch(startNewGame({
