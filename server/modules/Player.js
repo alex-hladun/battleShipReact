@@ -4,7 +4,7 @@ class Player {
   constructor(name, shipList, boardSize, difficulty = 0) {
     this.name = name;
     this.boardSize = boardSize;
-    this.shipList = shipList;
+    this.shipList = [...shipList];
     this.totalHits = 0;
     this.totalShipTargets = 0;
     this.board = [];
@@ -62,9 +62,11 @@ class Player {
       case undefined:
         return false;
       default:
+        console.log('shot target', shotTarget)
         enemy.shipList[shotTarget - 1].hitCount++;
         this.totalHits++;
-        enemy.board[targetRow][targetCol] = "X";
+        
+        console.log("Player -> attack -> this.totalHits", this.totalHits)
         io.to(gameID).emit('updateGame', {
           attackResults: {
             user: enemy.name,
@@ -80,8 +82,8 @@ class Player {
           }
         })
         console.log('enemy shiplist', enemy.shipList)
-        console.log('user shiplist', this.shipList)
-
+        console.log(`${this.name} shiplist`, this.shipList)
+        
         // Sunk ship Message
         if (enemy.shipList[shotTarget - 1].hitCount === enemy.shipList[shotTarget - 1].length) {
           io.to(gameID).emit('updateGame', {
@@ -94,6 +96,7 @@ class Player {
             winner: this.name
           })
         }
+        enemy.board[targetRow][targetCol] = "X";
         return true;
     }
   }

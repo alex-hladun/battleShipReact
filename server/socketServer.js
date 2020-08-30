@@ -17,6 +17,8 @@ module.exports = {
       socket.on('newGame', data => {
         socket.join(data.payload.gameName)
         gameManager.socketDirectory[socket.id] = data.payload.gameName;
+        console.log('ship list for new game', data.payload.shipList)
+        console.log('diff  for new game', data.payload.difficulty)
         switch (data.type) {
           case 'online':
             gameManager.newOnlineRoom(data.payload.gameName, data.payload.boardSize, data.payload.username, data.payload.shipList);

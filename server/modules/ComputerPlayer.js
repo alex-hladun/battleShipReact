@@ -5,8 +5,9 @@ const { Player } = require('./Player')
 class ComputerPlayer extends Player {
 
   constructor(name, shipList, boardSize, difficulty) {
+    // console.log('computer player constuctor called')
     super(name, shipList, boardSize, difficulty)
-    this.shipList = shipList;
+    this.shipList = JSON.parse(JSON.stringify(shipList));
     this.potentialMoves = [];
     this.difficulty = difficulty;
     this.randomizeBoard();
@@ -84,7 +85,7 @@ class ComputerPlayer extends Player {
           const colID = this.alphabet[col];
           const rowID = Number(row) + 1;
           this.potentialMoves.push(colID + rowID);
-          console.log(this.potentialMoves)
+          // console.log(this.potentialMoves)
           switch (this.difficulty) {
             case 0:
               this.potentialMoves.push(this.getRandomTarget());

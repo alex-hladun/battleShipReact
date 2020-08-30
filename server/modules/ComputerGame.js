@@ -17,9 +17,9 @@ const { ComputerPlayer } = require('./ComputerPlayer')
 
 class ComputerGame extends OnlineGame {
   constructor(gameName, boardSize, hostName, shipList, difficulty) {
-    super(gameName, boardSize, hostName, shipList)
+    super(gameName, boardSize, hostName, [...shipList])
     this.difficulty = difficulty;
-    this.opponent = new ComputerPlayer('Computer', shipList, boardSize, difficulty)
+    this.opponent = new ComputerPlayer('Computer', [...shipList], boardSize, difficulty)
   }
 
 }

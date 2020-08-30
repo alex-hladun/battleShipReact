@@ -25,6 +25,7 @@ export default function Settings() {
       console.log('Already 15')
     } else {
       dispatch(incrementBoardSize())
+      dispatch(checkShipSizes())
     }
   }
   const handleBoardSizeDecrease = () => {
@@ -32,6 +33,8 @@ export default function Settings() {
       console.log('Already At Minimum of 5')
     } else {
       dispatch(decrementBoardSize())
+      dispatch(checkShipSizes())
+
     }
   }
 
@@ -56,29 +59,36 @@ export default function Settings() {
         ship: shipID,
         delta: delta
       }))
+     dispatch(checkShipSizes())
+
     } else {
       console.log('Ship size must be > 1 and < boardSize - 3')
     }
   }
 
   const playWithFriend = () => {
-    dispatch(checkShipSizes())
-    dispatch(startNewGame({
-      type: 'online',
-      payload: {
-        boardSize: gameState.boardSize,
-        username: gameState.player.name,
-        shipList: gameState.player.shipList,
-        gameName: 'game' + (Math.random()*10000).toFixed(0)
-      }
-    }))
-    dispatch(resetBoard())
-    dispatch(transitionToGame())
+    new Promise((resolve, reject) => {
+      dispatch(checkShipSizes())
+      console.log(gameState.player.shipList)
+      resolve()
+    }).then(() => {
+      dispatch(startNewGame({
+        type: 'online',
+        payload: {
+          boardSize: gameState.boardSize,
+          username: gameState.player.name,
+          shipList: gameState.player.shipList,
+          gameName: 'game' + (Math.random()*10000).toFixed(0)
+        }
+      }))
+    }).then(() => {
+      dispatch(resetBoard())
+      dispatch(transitionToGame())
+    })
   }
   
-  const playWithComputer = () => {
-    dispatch(checkShipSizes())
-    dispatch(startNewGame({
+  const playWithComputer = async () => {    
+    await dispatch(startNewGame({
       type: 'computer',
       payload: {
         boardSize: gameState.boardSize,
@@ -88,8 +98,8 @@ export default function Settings() {
         difficulty: gameState.difficulty
       }
     }))
-    dispatch(resetBoard())
-    dispatch(transitionToGame())
+    await dispatch(resetBoard())
+    await dispatch(transitionToGame())
   }
 
   return (

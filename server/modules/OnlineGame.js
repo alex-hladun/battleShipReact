@@ -4,10 +4,10 @@ class OnlineGame {
   constructor(gameName, boardSize, hostName, shipList) {
     this.name = gameName;
     this.boardSize = boardSize
-    this.host = new Player(hostName, shipList, boardSize)
+    this.host = new Player(hostName, [...shipList], boardSize)
     this.hostReady = false;
     this.currentTurn = null;
-    this.opponent = new Player('waiting', shipList, boardSize);
+    this.opponent = new Player('waiting', [...shipList], boardSize);
     this.opponentReady = false;
   }
   
