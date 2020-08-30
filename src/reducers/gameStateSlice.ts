@@ -1,6 +1,7 @@
 // Exports a reducer function for the settings logic.
 // In charge of deciding if and how to update the state.settings section
 // Whenever an action is dispatched.
+// Redux-toolkit uses Immer.js which allows for 'mutable code' in the reducer.
 
 import { createSlice } from '@reduxjs/toolkit'
 import { GameState } from '../store/types'
