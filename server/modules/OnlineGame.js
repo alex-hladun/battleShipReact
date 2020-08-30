@@ -7,7 +7,7 @@ class OnlineGame {
     this.host = new Player(hostName, [...shipList], boardSize)
     this.hostReady = false;
     this.currentTurn = null;
-    this.opponent = new Player('waiting', [...shipList], boardSize);
+    this.opponent = new Player('waiting', JSON.parse(JSON.stringify(shipList)), boardSize);
     this.opponentReady = false;
   }
   

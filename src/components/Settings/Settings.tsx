@@ -34,7 +34,6 @@ export default function Settings() {
     } else {
       dispatch(decrementBoardSize())
       dispatch(checkShipSizes())
-
     }
   }
 
@@ -68,7 +67,6 @@ export default function Settings() {
 
   const playWithFriend = () => {
     new Promise((resolve, reject) => {
-      dispatch(checkShipSizes())
       console.log(gameState.player.shipList)
       resolve()
     }).then(() => {
@@ -87,8 +85,8 @@ export default function Settings() {
     })
   }
   
-  const playWithComputer = async () => {    
-    await dispatch(startNewGame({
+  const playWithComputer = () => {    
+    dispatch(startNewGame({
       type: 'computer',
       payload: {
         boardSize: gameState.boardSize,
@@ -98,8 +96,8 @@ export default function Settings() {
         difficulty: gameState.difficulty
       }
     }))
-    await dispatch(resetBoard())
-    await dispatch(transitionToGame())
+    dispatch(resetBoard())
+    dispatch(transitionToGame())
   }
 
   return (
