@@ -29,7 +29,14 @@ class GameList {
 
   // Sends the updated room list to all clients in the 'lobby'
   sendRoomUpdate(io) {
-    io.to("lobby").emit("gameListUpdate", this.onlineRoomList);
+    const openRoomList = {}
+    Object.keys(this.onlineRoomList).forEach(room => {
+      if (this.onlineRoomList[room].opponent.name === 'waiting') {
+        openRoomList[room.name] = this.onlineRoomList[room]
+      }
+    })
+    console.log('this room list', openRoomList)
+    io.to("lobby").emit("gameListUpdate", openRoomList);
   }
 
   sendGameMessage(io, gameID, logMessage) {

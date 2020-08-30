@@ -48,6 +48,7 @@ module.exports = {
           gameManager.onlineRoomList[data.payload.game].opponent.name = data.payload.user;
           socket.join(data.payload.game)
           gameManager.socketDirectory[socket.id] = data.payload.game;
+          gameManager.sendRoomUpdate(io)
 
           socket.emit('joinSuccess', {
             gameID: data.payload.game,
