@@ -4,7 +4,6 @@ import Settings from './Settings';
 import store from '../../store/index'
 import { Provider } from 'react-redux'
 import configureStore from 'redux-mock-store';
-import { start } from 'repl';
 const mockStore = configureStore([]);
 let store2: any;
 
